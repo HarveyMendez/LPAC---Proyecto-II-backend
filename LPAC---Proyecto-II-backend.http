@@ -1,6 +1,0 @@
-@LPAC___Proyecto_II_backend_HostAddress = http://localhost:5282
-
-GET {{LPAC___Proyecto_II_backend_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###
