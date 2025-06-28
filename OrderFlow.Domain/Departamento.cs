@@ -1,13 +1,16 @@
+
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace OrderFlow.Domain
 {
     public class Departamento
     {
+
         private int deptoCod;
         private string nombreDepartament;
 
@@ -26,3 +29,17 @@ namespace OrderFlow.Domain
         public string NombreDepartament { get => nombreDepartament; set => nombreDepartament = value; }
     }
 }
+
+        public string DeptoCod { get; set; }
+        public string NombreDepartament { get; set; }
+
+        public Departamento() { }
+
+        public Departamento(string deptoCod, string nombreDepartament)
+        {
+            DeptoCod = deptoCod;
+            NombreDepartament = nombreDepartament;
+        }
+    }
+}
+

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace OrderFlow.Domain
 {
     public class MetodoPago
@@ -26,3 +27,19 @@ namespace OrderFlow.Domain
         public string MetodoPagoNombre { get => metodoPagoNombre; set => metodoPagoNombre = value; }
     }
 }
+
+        public int IdMetodoPago { get; set; }
+        public string MedotoPago { get; set; }
+        public bool TarjetaCredito { get; set; }
+
+        public MetodoPago() { }
+
+        public MetodoPago(int idMetodoPago, string medotoPago, bool tarjetaCredito)
+        {
+            IdMetodoPago = idMetodoPago;
+            MedotoPago = medotoPago;
+            TarjetaCredito = tarjetaCredito;
+        }
+    }
+}
+
