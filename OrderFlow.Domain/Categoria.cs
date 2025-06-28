@@ -9,7 +9,6 @@ namespace OrderFlow.Domain
 {
     public class Categoria
     {
-
         private int codCategoria;
         private string descripcion;
 
@@ -29,16 +28,4 @@ namespace OrderFlow.Domain
     }
 }
 
-        public string CodCategoria { get; set; }
-        public string Descripcion { get; set; }
-
-        public Categoria() { }
-
-        public Categoria(string codCategoria, string descripcion)
-        {
-            CodCategoria = codCategoria;
-            Descripcion = descripcion;
-        }
-    }
-}
 
