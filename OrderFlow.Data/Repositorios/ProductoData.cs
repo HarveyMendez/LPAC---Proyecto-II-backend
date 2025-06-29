@@ -28,7 +28,9 @@ namespace OrderFlow.Data.Repositorios
 
         public void Modificar(Producto producto)
         {
-            _contexto.Productos
+            _contexto.Productos.Update(producto);
+
+            _contexto.SaveChanges();
         }
 
         public Producto VerProductoPorID(int id)
