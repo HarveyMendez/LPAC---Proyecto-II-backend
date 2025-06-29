@@ -1,8 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
-using OrderFlow.Data.Interfaces;
-using OrderFlow.Domain;
+
 
 namespace OrderFlow.API.Controllers
 {

@@ -29,7 +29,7 @@ namespace OrderFlow.Business.Servicios
                 extension = empleadoDTO.extension,
                 telefono_trabajo = empleadoDTO.telefonoTrabajo,
                 depto_cod = empleadoDTO.departamento?.codDepartamento,
-                id_rol = empleadoDTO.empleado?.idEmpleado ?? 0
+                id_rol = empleadoDTO.rol.idRol
             };
 
             _empleadoData.Crear(empleado);
@@ -51,7 +51,7 @@ namespace OrderFlow.Business.Servicios
                 extension = empleado.extension,
                 telefono_trabajo = empleado.telefonoTrabajo,
                 depto_cod = empleado.departamento?.codDepartamento,
-                id_rol = empleado.empleado?.idEmpleado ?? 0
+                id_rol = empleado.rol.idRol
             };
 
             _empleadoData.Modificar(empleadoData);
