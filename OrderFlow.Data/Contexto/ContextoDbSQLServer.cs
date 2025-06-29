@@ -18,9 +18,9 @@ namespace OrderFlow.Data.Contexto
         public DbSet<Categoria> Categorias { get; set; }
         public DbSet<Cliente> Clientes { get; set; }
         //public DbSet<Orden> Ordenes { get; set; }
-        //public DbSet<Empleado> Empleados { get; set; }
+        public DbSet<Empleado> Empleados { get; set; }
         //public DbSet<DetalleOrden> DetalleOrdenes { get; set; }
-        //public DbSet<Rol> Roles { get; set; }
+        public DbSet<Rol> Roles { get; set; }
         //public DbSet<InformacionDeMiCompania> InformacionDeMiCompania { get; set; }
         //public DbSet<Pagos> Pagos { get; set; }
         public DbSet<Departamento> Departamentos { get; set; }
