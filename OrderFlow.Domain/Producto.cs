@@ -1,41 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-
 namespace OrderFlow.Domain
 {
+    [Table("Producto")]
     public class Producto
     {
-        private int idProducto;
-        private string nombreProducto;
-        private decimal precio;
-        private int codCategoria;
-        private int cantidadExistencias;
-        private int puntoReorden;
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public int id_producto { get; set; }
+        [Required]
+        public string nombre_producto { get; set; } = string.Empty;
+        [Required]
+        public float precio { get; set; }
+        [Required]
+        public int cantidad_existencias { get; set; }
+        [Required]
+        public int punto_reorden { get; set; }
+        [Required]
+        public bool aplica_impuesto { get; set; }
+        public string talla { get; set; } = string.Empty;
+        [Required]
+        public bool eliminado { get; set; } = false;
 
-        public Producto()
-        {
-            // Constructor vacío
-        }
 
-        public Producto(int idProducto, string nombreProducto, decimal precio, int codCategoria, int cantidadExistencias, int puntoReorden)
-        {
-            this.idProducto = idProducto;
-            this.nombreProducto = nombreProducto;
-            this.precio = precio;
-            this.codCategoria = codCategoria;
-            this.cantidadExistencias = cantidadExistencias;
-            this.puntoReorden = puntoReorden;
-        }
 
-        public int IdProducto { get => idProducto; set => idProducto = value; }
-        public string NombreProducto { get => nombreProducto; set => nombreProducto = value; }
-        public decimal Precio { get => precio; set => precio = value; }
-        public int CodCategoria { get => codCategoria; set => codCategoria = value; }
-        public int CantidadExistencias { get => cantidadExistencias; set => cantidadExistencias = value; }
-        public int PuntoReorden { get => puntoReorden; set => puntoReorden = value; }
+
+        // Virtual Links
+
+        [MaxLength(4)]
+        public string? cod_categoria { get; set; } 
+
+        [ForeignKey("cod_categoria")]
+        public virtual Categoria? Categoria { get; set; } 
+
+
+
     }
 }
