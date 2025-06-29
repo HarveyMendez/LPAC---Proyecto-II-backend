@@ -31,5 +31,11 @@ namespace OrderFlow.Domain
         [ForeignKey("depto_cod")]
         public virtual Departamento? Departamento { get; set; }
 
+        [MaxLength(4)]
+        public int id_rol { get; set; }
+
+        [ForeignKey("id_rol")]
+        public virtual Rol? Rol { get; set; }
+
     }
 }
