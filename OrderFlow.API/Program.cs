@@ -18,6 +18,8 @@ builder.Services.AddDbContext<ContextoDbSQLServer>(options => options.UseSqlServ
 
 builder.Services.AddScoped<IProductoBusiness, ProductoBusiness>();
 builder.Services.AddScoped<IProductoData, ProductoData>();
+builder.Services.AddScoped<ICategoriaBusiness, CategoriaBusiness>();
+builder.Services.AddScoped<ICategoriaData, CategoriaData>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

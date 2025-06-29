@@ -26,6 +26,10 @@ namespace OrderFlow.Data.Contexto
         //public DbSet<Departamento> Departamentos { get; set; }
         //public DbSet<MetodoPago> MetodoPagos { get; set; }
 
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Categoria>().HasKey(c => c.cod_categoria);
+        //}
 
     }
 }

@@ -12,7 +12,6 @@ namespace OrderFlow.Domain
     public class Categoria
     {
         [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public string cod_categoria { get; set; } = string.Empty;
 
         [Required]
