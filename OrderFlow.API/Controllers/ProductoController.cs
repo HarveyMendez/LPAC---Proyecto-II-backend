@@ -33,7 +33,7 @@ namespace OrderFlow.API.Controllers
                 categoria = new CategoriaDTO
                 {
                     codCategoria = p.cod_categoria,
-                    descripcion = p.Categoria.cod_categoria
+                    descripcion = p.Categoria.descripcion,
                 },
                 cantidadExistencias = p.cantidad_existencias,
                 puntoReorden = p.punto_reorden,
@@ -55,7 +55,19 @@ namespace OrderFlow.API.Controllers
             }
             return new ProductoDTO
             {
-
+                idProducto = producto.id_producto,
+                nombreProducto = producto.nombre_producto,
+                precio = producto.precio,
+                categoria = new CategoriaDTO
+                {
+                    codCategoria = producto.cod_categoria,
+                    descripcion = producto.Categoria?.descripcion ?? string.Empty,
+                },
+                cantidadExistencias = producto.cantidad_existencias,
+                puntoReorden = producto.punto_reorden,
+                aplicaImpuesto = producto.aplica_impuesto,
+                talla = producto.talla,
+                eliminado = producto.eliminado
             };
         }
 
@@ -69,7 +81,15 @@ namespace OrderFlow.API.Controllers
 
             var producto = new OrderFlow.Domain.Producto
             {
-                
+                nombre_producto = productoDto.nombreProducto,
+                precio = productoDto.precio,
+                cantidad_existencias = productoDto.cantidadExistencias,
+                punto_reorden = productoDto.puntoReorden,
+                aplica_impuesto = productoDto.aplicaImpuesto,
+                talla = productoDto.talla,
+                eliminado = productoDto.eliminado,
+                cod_categoria = productoDto.categoria.codCategoria
+
             };
 
             _productoBusiness.Crear(producto);
@@ -92,11 +112,14 @@ namespace OrderFlow.API.Controllers
                 return NotFound();
             }
 
-            //producto.NombreProducto = productoDto.nombreProducto;
-            //producto.Precio = productoDto.precio;
-            //producto.CodCategoria = productoDto.codCategoria;
-            //producto.CantidadExistencias = productoDto.cantidadExistencias;
-            //producto.PuntoReorden = productoDto.puntoReorden;
+            producto.nombre_producto = productoDto.nombreProducto;
+            producto.precio = productoDto.precio;
+            producto.cantidad_existencias = productoDto.cantidadExistencias;
+            producto.punto_reorden = productoDto.puntoReorden;
+            producto.aplica_impuesto = productoDto.aplicaImpuesto;
+            producto.talla = productoDto.talla;
+            producto.eliminado = productoDto.eliminado;
+            producto.cod_categoria = productoDto.categoria.codCategoria;
 
             _productoBusiness.Modificar(producto);
 

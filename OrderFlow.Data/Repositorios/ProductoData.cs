@@ -37,7 +37,7 @@ namespace OrderFlow.Data.Repositorios
         public Producto VerProductoPorID(int id)
         {
             var producto = _contexto.Productos
-                .Include(p => p.cod_categoria)
+                .Include(p => p.Categoria)
                 .FirstOrDefault(p => p.id_producto == id);
 
             return producto;
@@ -45,7 +45,9 @@ namespace OrderFlow.Data.Repositorios
 
         public List<Producto> VerProductos()
         {
-            var productos = _contexto.Productos.ToList();
+            var productos = _contexto.Productos
+                .Include(p => p.Categoria)                        
+                .ToList();
 
             return productos;
         }
