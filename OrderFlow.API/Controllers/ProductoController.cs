@@ -27,12 +27,19 @@ namespace OrderFlow.API.Controllers
 
             return productos.Select(p => new ProductoDTO
             {
-                idProducto = p.IdProducto,
-                nombreProducto = p.NombreProducto,
-                precio = p.Precio,
-                codCategoria = p.CodCategoria,
-                cantidadExistencias = p.CantidadExistencias,
-                puntoReorden = p.PuntoReorden
+                idProducto = p.id_producto,
+                nombreProducto = p.nombre_producto,
+                precio = p.precio,
+                categoria = new CategoriaDTO
+                {
+                    codCategoria = p.cod_categoria,
+                    descripcion = p.Categoria.cod_categoria
+                },
+                cantidadExistencias = p.cantidad_existencias,
+                puntoReorden = p.punto_reorden,
+                aplicaImpuesto = p.aplica_impuesto,
+                talla = p.talla,
+                eliminado = p.eliminado
             }).ToList();
 
         }
@@ -48,12 +55,7 @@ namespace OrderFlow.API.Controllers
             }
             return new ProductoDTO
             {
-                idProducto = producto.IdProducto,
-                nombreProducto = producto.NombreProducto,
-                precio = producto.Precio,
-                codCategoria = producto.CodCategoria,
-                cantidadExistencias = producto.CantidadExistencias,
-                puntoReorden = producto.PuntoReorden
+
             };
         }
 
@@ -67,16 +69,12 @@ namespace OrderFlow.API.Controllers
 
             var producto = new OrderFlow.Domain.Producto
             {
-                NombreProducto = productoDto.nombreProducto,
-                Precio = productoDto.precio,
-                CodCategoria = productoDto.codCategoria,
-                CantidadExistencias = productoDto.cantidadExistencias,
-                PuntoReorden = productoDto.puntoReorden
+                
             };
 
             _productoBusiness.Crear(producto);
 
-            return CreatedAtAction(nameof(VerProductoPorID), new { id = producto.IdProducto }, producto);
+            return CreatedAtAction(nameof(VerProductoPorID), new { id = producto.id_producto }, producto);
         }
 
         [HttpPut("{id}")]
@@ -94,11 +92,11 @@ namespace OrderFlow.API.Controllers
                 return NotFound();
             }
 
-            producto.NombreProducto = productoDto.nombreProducto;
-            producto.Precio = productoDto.precio;
-            producto.CodCategoria = productoDto.codCategoria;
-            producto.CantidadExistencias = productoDto.cantidadExistencias;
-            producto.PuntoReorden = productoDto.puntoReorden;
+            //producto.NombreProducto = productoDto.nombreProducto;
+            //producto.Precio = productoDto.precio;
+            //producto.CodCategoria = productoDto.codCategoria;
+            //producto.CantidadExistencias = productoDto.cantidadExistencias;
+            //producto.PuntoReorden = productoDto.puntoReorden;
 
             _productoBusiness.Modificar(producto);
 

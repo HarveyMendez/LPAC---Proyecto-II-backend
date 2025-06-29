@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using OrderFlow.Data.Contexto;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
@@ -35,7 +36,9 @@ namespace OrderFlow.Data.Repositorios
 
         public Producto VerProductoPorID(int id)
         {
-            var producto = _contexto.Productos.FirstOrDefault(p => p.IdProducto == id);
+            var producto = _contexto.Productos
+                .Include(p => p.cod_categoria)
+                .FirstOrDefault(p => p.id_producto == id);
 
             return producto;
         }

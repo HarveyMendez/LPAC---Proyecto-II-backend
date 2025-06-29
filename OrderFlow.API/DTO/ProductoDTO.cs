@@ -4,9 +4,13 @@
     {
         public int idProducto { get; set; }
         public string nombreProducto { get; set; } = string.Empty;
-        public decimal precio { get; set; }
-        public int codCategoria { get; set; }
+        public float precio { get; set; }
+        public CategoriaDTO categoria { get; set; } = new CategoriaDTO();
         public int cantidadExistencias { get; set; }
         public int puntoReorden { get; set; }
+        public bool aplicaImpuesto { get; set; } = false;
+        public string talla { get; set; } = string.Empty;
+        public bool eliminado { get; set; } = false;
+
     }
 }
