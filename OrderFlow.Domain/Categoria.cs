@@ -1,31 +1,22 @@
-
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace OrderFlow.Domain
 {
+    [Table("Categoria")]
     public class Categoria
     {
-        private int codCategoria;
-        private string descripcion;
+        [Key]
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        public string cod_categoria { get; set; } = string.Empty;
 
-        public Categoria()
-        {
-            // Constructor vacío
-        }
+        [Required]
+        public string descripcion { get; set; } = string.Empty;
 
-        public Categoria(int codCategoria, string descripcion)
-        {
-            this.codCategoria = codCategoria;
-            this.descripcion = descripcion;
-        }
-
-        public int CodCategoria { get => codCategoria; set => codCategoria = value; }
-        public string Descripcion { get => descripcion; set => descripcion = value; }
     }
 }
-
-
