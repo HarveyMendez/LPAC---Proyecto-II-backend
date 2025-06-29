@@ -1,4 +1,5 @@
-﻿using OrderFlow.Domain;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace OrderFlow.Business.Interfaces
 {
     public interface ICategoriaBusiness
     {
-        public void Crear(Categoria categoria);
-        public void Modificar(Categoria categoria);
-        public Categoria VerCategoriaPorID(string id);
-        public List<Categoria> VerCategorias();
+        public void Crear(CategoriaDTO categoria);
+        public void Modificar(CategoriaDTO categoria);
+        public CategoriaDTO VerCategoriaPorID(string id);
+        public List<CategoriaDTO> VerCategorias();
         public void Eliminar(string id);
     }
 }

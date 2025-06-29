@@ -1,4 +1,5 @@
-﻿using OrderFlow.Domain;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,10 +10,10 @@ namespace OrderFlow.Business.Interfaces
 {
     public interface IDepartamentoBusiness
     {
-        public void Crear(Departamento departamento);
-        public void Modificar(Departamento departamento);
+        public void Crear(DepartamentoDTO departamento);
+        public void Modificar(DepartamentoDTO departamento);
         public void Eliminar(string id_departamento);
-        public Departamento ObtenerPorId(string id_departamento);
-        public List<Departamento> ObtenerTodos();
+        public DepartamentoDTO ObtenerPorId(string id_departamento);
+        public List<DepartamentoDTO> ObtenerTodos();
     }
 }

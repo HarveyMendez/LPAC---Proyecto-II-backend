@@ -63,8 +63,6 @@ namespace OrderFlow.API.Controllers
                 return BadRequest($"Error al crear el empleado: {ex.Message}");
             }
 
-
-
         }
 
         [HttpPut("{id}")]
@@ -74,6 +72,7 @@ namespace OrderFlow.API.Controllers
             {
                 return BadRequest("El empleado no puede ser nulo.");
             }
+
             try
             {
                 _empleadoBusiness.Modificar(empleadoDto);

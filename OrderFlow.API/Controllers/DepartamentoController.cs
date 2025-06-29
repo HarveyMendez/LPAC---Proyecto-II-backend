@@ -18,7 +18,7 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpGet]
-        public List<DepartamentoDTO> VerDepartamentos()
+        public ActionResult<List<DepartamentoDTO>> VerDepartamentos()
         {
             var departamentos = _departamentoBusiness.ObtenerTodos();
 
@@ -27,27 +27,21 @@ namespace OrderFlow.API.Controllers
                 return new List<DepartamentoDTO>();
             }
 
-            return departamentos.Select(d => new DepartamentoDTO
-            {
-                codDepartamento = d.depto_cod,
-                nombreDepartamento = d.nombre_departament
-
-            }).ToList();
+            return Ok(departamentos);
         }
 
         [HttpGet("{id}")]
         public ActionResult<DepartamentoDTO> VerDepartamentoPorID(string id)
         {
             var departamento = _departamentoBusiness.ObtenerPorId(id);
+
             if (departamento == null)
             {
                 return NotFound();
             }
-            return new DepartamentoDTO
-            {
-                codDepartamento = departamento.depto_cod,
-                nombreDepartamento = departamento.nombre_departament
-            };
+
+            return Ok(departamento);
+
         }
 
         [HttpPost]
@@ -57,13 +51,17 @@ namespace OrderFlow.API.Controllers
             {
                 return BadRequest("Datos de departamento inválidos.");
             }
-            var departamento = new Departamento
+
+            try
             {
-                depto_cod = departamentoDto.codDepartamento,
-                nombre_departament = departamentoDto.nombreDepartamento
-            };
-            _departamentoBusiness.Crear(departamento);
-            return CreatedAtAction(nameof(VerDepartamentoPorID), new { id = departamento.depto_cod }, departamentoDto);
+                _departamentoBusiness.Crear(departamentoDto);
+
+                return Ok(departamentoDto);
+
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al crear departamento: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
@@ -81,23 +79,40 @@ namespace OrderFlow.API.Controllers
                 return NotFound();
             }
 
-            departamento.nombre_departament = departamentoDto.nombreDepartamento;
+            try
+            {
+                _departamentoBusiness.Modificar(departamentoDto);
 
-            _departamentoBusiness.Modificar(departamento);
+                return Ok(departamentoDto);
 
-            return NoContent();
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al modificar departamento: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult EliminarDepartamento(string id)
         {
             var departamento = _departamentoBusiness.ObtenerPorId(id);
+
             if (departamento == null)
             {
                 return NotFound();
             }
-            _departamentoBusiness.Eliminar(id);
-            return NoContent();
+
+            try
+            {
+                _departamentoBusiness.Eliminar(id);
+
+                return Ok($"Departamento con ID: {id} eliminado correctamente");
+
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al eliminar departamento: {ex.Message}");
+            }
+
+   
         }
     }
 }

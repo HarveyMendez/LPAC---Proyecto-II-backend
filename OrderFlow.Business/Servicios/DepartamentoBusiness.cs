@@ -1,4 +1,5 @@
-﻿using OrderFlow.Business.Interfaces;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Business.Interfaces;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -18,8 +19,14 @@ namespace OrderFlow.Business.Servicios
             _departamentoData = departamentoData;
         }
 
-        public void Crear(Departamento departamento)
+        public void Crear(DepartamentoDTO departamentoDTO)
         {
+            var departamento = new Departamento
+            {
+                depto_cod = departamentoDTO.codDepartamento,
+                nombre_departament = departamentoDTO.nombreDepartamento,
+            };
+
             _departamentoData.Crear(departamento);
         }
 
@@ -28,19 +35,35 @@ namespace OrderFlow.Business.Servicios
             _departamentoData.Eliminar(id_departamento);
         }
 
-        public void Modificar(Departamento departamento)
+        public void Modificar(DepartamentoDTO departamento)
         {
-            _departamentoData.Modificar(departamento);
+            var departamentoExistente = _departamentoData.ObtenerPorId(departamento.codDepartamento);
+
+            departamentoExistente.nombre_departament = departamento.nombreDepartamento;
+
+            _departamentoData.Modificar(departamentoExistente);
         }
 
-        public Departamento ObtenerPorId(string id_departamento)
+        public DepartamentoDTO ObtenerPorId(string id_departamento)
         {
-            return _departamentoData.ObtenerPorId(id_departamento);
+            var departamento =  _departamentoData.ObtenerPorId(id_departamento);
+
+            return new DepartamentoDTO
+            {
+                codDepartamento = departamento.depto_cod,
+                nombreDepartamento = departamento.nombre_departament
+            };
         }
 
-        public List<Departamento> ObtenerTodos()
+        public List<DepartamentoDTO> ObtenerTodos()
         {
-            return _departamentoData.ObtenerTodos();
+            var departamentos = _departamentoData.ObtenerTodos();
+
+            return departamentos.Select(d => new DepartamentoDTO
+            {
+                codDepartamento = d.depto_cod,
+                nombreDepartamento = d.nombre_departament
+            }).ToList();
         }
     }
 }

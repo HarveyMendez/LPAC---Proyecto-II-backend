@@ -17,7 +17,7 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpGet]
-        public List<CategoriaDTO> VerCategorias()
+        public ActionResult<List<CategoriaDTO>> VerCategorias()
         {
             var categorias = _categoriaBusiness.VerCategorias();
 
@@ -26,26 +26,20 @@ namespace OrderFlow.API.Controllers
                 return new List<CategoriaDTO>();
             }
 
-            return categorias.Select(c => new CategoriaDTO
-            {
-                codCategoria = c.cod_categoria,
-                descripcion = c.descripcion
-            }).ToList();
+            return Ok(categorias);
         }
 
         [HttpGet("{id}")]
         public ActionResult<CategoriaDTO> VerCategoriaPorID(string id)
         {
             var categoria = _categoriaBusiness.VerCategoriaPorID(id);
+
             if (categoria == null)
             {
                 return NotFound();
             }
-            return new CategoriaDTO
-            {
-                codCategoria = categoria.cod_categoria,
-                descripcion = categoria.descripcion
-            };
+
+            return Ok(categoria);
         }
 
         [HttpPost]
@@ -56,15 +50,16 @@ namespace OrderFlow.API.Controllers
                 return BadRequest("Datos de categoría inválidos.");
             }
 
-            var categoria = new Categoria
+            try
             {
-                cod_categoria = categoriaDto.codCategoria,
-                descripcion = categoriaDto.descripcion
-            };
+                _categoriaBusiness.Crear(categoriaDto);
 
-            _categoriaBusiness.Crear(categoria);
+                return Ok(categoriaDto);
 
-            return CreatedAtAction(nameof(VerCategoriaPorID), new { id = categoria.cod_categoria }, categoriaDto);
+            } catch (Exception ex)
+            {
+                return BadRequest($"Error al crear categoria: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
@@ -82,11 +77,16 @@ namespace OrderFlow.API.Controllers
                 return NotFound();
             }
 
-            categoriaExistente.descripcion = categoriaDto.descripcion;
+            try
+            {
+                _categoriaBusiness.Modificar(categoriaExistente);
 
-            _categoriaBusiness.Modificar(categoriaExistente);
+                return Ok(categoriaDto);
 
-            return NoContent();
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al modificar categoria: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
@@ -99,9 +99,18 @@ namespace OrderFlow.API.Controllers
                 return NotFound();
             }
 
-            _categoriaBusiness.Eliminar(id);
+            try
+            {
+                _categoriaBusiness.Eliminar(id);
 
-            return NoContent();
+                return Ok($"Categoria con ID: {id} eliminada correctamente");
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al eliminar la categoría: {ex.Message}");
+            }
+
         }
     }
 }

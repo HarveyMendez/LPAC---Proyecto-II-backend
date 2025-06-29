@@ -51,9 +51,18 @@ namespace OrderFlow.API.Controllers
                 return BadRequest("El rol no puede ser nulo.");
             }
 
-            _rolBusiness.Crear(rol);
+            try
+            {
 
-            return Ok(rol);
+                _rolBusiness.Crear(rol);
+
+                return Ok(rol);
+
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al crear rol: {ex.Message}");
+            }
+
         }
 
         [HttpPut("{id}")]
@@ -71,9 +80,18 @@ namespace OrderFlow.API.Controllers
                 return NotFound($"No se encontró el rol con ID {id}.");
             }
 
-            _rolBusiness.Modificar(rol);
+            try
+            {
+                _rolBusiness.Modificar(rol);
 
-            return NoContent();
+                return Ok(rol);
+
+            } catch (Exception ex)
+            {
+                return BadRequest($"Error al modificar rol: {ex.Message}");
+            }
+
+
         }
 
         [HttpDelete("{id}")]
@@ -86,9 +104,18 @@ namespace OrderFlow.API.Controllers
                 return NotFound($"No se encontró el rol con ID {id}.");
             }
 
-            _rolBusiness.Eliminar(id);
+            try
+            {
+                _rolBusiness.Eliminar(id);
 
-            return NoContent();
+                return Ok($"Rol con ID: {id} eliminado correctamente");
+
+            } catch (Exception ex)
+            {
+                return BadRequest($"Error al eliminar rol: {ex.Message}");
+            }
+
+
         }
     }
 }
