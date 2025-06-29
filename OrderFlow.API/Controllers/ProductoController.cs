@@ -125,5 +125,21 @@ namespace OrderFlow.API.Controllers
 
             return NoContent();
         }
+
+        [HttpDelete("{id}")]
+        public ActionResult Delete(int id)
+        {
+            var producto = _productoBusiness.VerProductoPorID(id);
+
+            if (producto == null)
+            {
+                return NotFound();
+
+            }
+            _productoBusiness.Eliminar(id);
+
+            return NoContent();
+        }
+
     }
 }
