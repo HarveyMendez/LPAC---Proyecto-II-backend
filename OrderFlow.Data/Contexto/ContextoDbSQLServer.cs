@@ -23,7 +23,7 @@ namespace OrderFlow.Data.Contexto
         //public DbSet<Rol> Roles { get; set; }
         //public DbSet<InformacionDeMiCompania> InformacionDeMiCompania { get; set; }
         //public DbSet<Pagos> Pagos { get; set; }
-        //public DbSet<Departamento> Departamentos { get; set; }
+        public DbSet<Departamento> Departamentos { get; set; }
         //public DbSet<MetodoPago> MetodoPagos { get; set; }
 
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
