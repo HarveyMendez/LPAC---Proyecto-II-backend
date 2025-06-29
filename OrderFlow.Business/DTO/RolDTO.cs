@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Identity;
-
-namespace OrderFlow.API.DTO
+﻿namespace OrderFlow.API.DTO
 {
     public class RolDTO
     {

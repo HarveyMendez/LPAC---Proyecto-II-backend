@@ -26,6 +26,8 @@ builder.Services.AddScoped<IDepartamentoBusiness, DepartamentoBusiness>();
 builder.Services.AddScoped<IDepartamentoData, DepartamentoData>();
 builder.Services.AddScoped<IRolBusiness, RolBusiness>();
 builder.Services.AddScoped<IRolData, RolData>();
+builder.Services.AddScoped<IEmpleadoBusiness, EmpleadoBusiness>();
+builder.Services.AddScoped<IEmpleadoData, EmpleadoData>();
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi

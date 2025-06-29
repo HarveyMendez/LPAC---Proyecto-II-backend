@@ -16,7 +16,7 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult ObtenerTodos()
+        public ActionResult<List<EmpleadoDTO>> ObtenerTodos()
         {
             var empleados = _empleadoBusiness.ObtenerTodos();
 

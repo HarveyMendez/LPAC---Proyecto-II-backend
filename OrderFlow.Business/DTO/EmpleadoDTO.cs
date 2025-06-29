@@ -11,6 +11,6 @@ namespace OrderFlow.API.DTO
         public string extension { get; set; } = string.Empty;
         public string telefonoTrabajo { get; set; } = string.Empty;
         public DepartamentoDTO departamento { get; set; } = new DepartamentoDTO();
-        public EmpleadoDTO empleado { get; set; } = new EmpleadoDTO();
+        public RolDTO rol { get; set; } = new RolDTO();
     }
 }

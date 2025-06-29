@@ -76,10 +76,10 @@ namespace OrderFlow.Business.Servicios
                         codDepartamento = empleado.Departamento.depto_cod,
                         nombreDepartamento = empleado.Departamento.nombre_departament
                     } : null,
-                    empleado = empleado.Rol != null ? new EmpleadoDTO
+                    rol = empleado.Rol != null ? new RolDTO
                     {
-                        idEmpleado = empleado.Rol.id_rol,
-                        nombreEmpleado = empleado.Rol.nombre_rol
+                        idRol = empleado.Rol.id_rol,
+                        nombreRol = empleado.Rol.nombre_rol
                     } : null
                 };
             }
@@ -104,10 +104,10 @@ namespace OrderFlow.Business.Servicios
                     codDepartamento = e.Departamento.depto_cod,
                     nombreDepartamento = e.Departamento.nombre_departament
                 } : null,
-                empleado = e.Rol != null ? new EmpleadoDTO
+                rol = e.Rol != null ? new RolDTO
                 {
-                    idEmpleado = e.Rol.id_rol,
-                    nombreEmpleado = e.Rol.nombre_rol
+                    idRol = e.Rol.id_rol,
+                    nombreRol = e.Rol.nombre_rol
                 } : null
             }).ToList();
         }

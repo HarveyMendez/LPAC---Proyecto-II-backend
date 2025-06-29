@@ -1,4 +1,5 @@
-﻿using OrderFlow.Domain;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Domain;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +10,11 @@ namespace OrderFlow.Business.Interfaces
 {
     public interface IRolBusiness
     {
-        public void Crear(Rol rol);
-        public void Modificar(Rol rol);
+        public void Crear(RolDTO rol);
+        public void Modificar(RolDTO rol);
         public void Eliminar(int id);
-        public Rol VerRolPorID(int id);
-        public List<Rol> VerRoles();
+        public RolDTO VerRolPorID(int id);
+        public List<RolDTO> VerRoles();
 
     }
 }
