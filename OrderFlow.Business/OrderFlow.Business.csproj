@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\OrderFlow.Data\OrderFlow.Data.csproj" />
     <ProjectReference Include="..\OrderFlow.Domain\OrderFlow.Domain.csproj" />
   </ItemGroup>

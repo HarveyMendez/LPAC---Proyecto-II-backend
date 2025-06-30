@@ -14,5 +14,11 @@ namespace OrderFlow.Data.Interfaces
         public void Eliminar(int id_empleado);
         public Empleado ObtenerPorId(int id_empleado);
         public List<Empleado> ObtenerTodos();
+
+        // para autenticacion
+
+        Task<Empleado> ObtenerPorUsuarioAsync(string nombreUsuario);
+        Task<Empleado> ObtenerPorIdAsync(int id);
+
     }
 }

@@ -30,7 +30,7 @@ namespace OrderFlow.Data.Repositorios
         {
             var empleado = ObtenerPorId(id_empleado);
 
-            if(empleado != null)
+            if (empleado != null)
             {
                 _contexto.Empleados.Remove(empleado);
 
@@ -63,6 +63,21 @@ namespace OrderFlow.Data.Repositorios
                 .ToList();
 
             return empleados;
+        }
+
+        // para autenticacion
+        public async Task<Empleado> ObtenerPorUsuarioAsync(string nombreUsuario)
+        {
+            return await _contexto.Empleados
+                .Include(e => e.Rol)
+                .FirstOrDefaultAsync(e => e.nombre_usuario == nombreUsuario);
+        }
+
+        public async Task<Empleado> ObtenerPorIdAsync(int id)
+        {
+            return await _contexto.Empleados
+                .Include(e => e.Rol)
+                .FirstOrDefaultAsync(e => e.id_empleado == id);
         }
     }
 }

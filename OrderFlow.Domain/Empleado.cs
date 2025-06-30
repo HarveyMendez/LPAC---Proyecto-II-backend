@@ -37,5 +37,10 @@ namespace OrderFlow.Domain
         [ForeignKey("id_rol")]
         public virtual Rol? Rol { get; set; }
 
+        // Para la autenticacion
+        public string? nombre_usuario { get; set; }
+        public string? contrasena_hash { get; set; }
+        public string? email { get; set; }
+
     }
 }
