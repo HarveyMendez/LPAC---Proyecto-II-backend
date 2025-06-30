@@ -1,5 +1,6 @@
 ﻿using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -49,22 +50,14 @@ namespace OrderFlow.Business.Servicios
         {
             var roles =  _rolData.ObtenerTodos();
 
-            return roles.Select(r => new RolDTO
-            {
-                idRol = r.id_rol,
-                nombreRol = r.nombre_rol
-            }).ToList();
+            return roles.Select(r => RolMapper.ToDTO(r)).ToList();
         }
 
         public RolDTO VerRolPorID(int id)
         {
             var rol = _rolData.ObtenerPorId(id);
 
-            return new RolDTO
-            {
-                idRol = rol.id_rol,
-                nombreRol = rol.nombre_rol
-            };
+            return RolMapper.ToDTO(rol);
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -65,46 +66,16 @@ namespace OrderFlow.Business.Servicios
 
         public ClienteDTO ObtenerPorId(int id_cliente)
         {
-            var departamento = _clienteData.ObtenerPorId(id_cliente);   
+            var cliente = _clienteData.ObtenerPorId(id_cliente);   
 
-            return departamento == null ? null : new ClienteDTO
-            {
-                ciudad = departamento.ciudad,
-                direccion = departamento.direccion,
-                codigoPostal = departamento.codigo_postal,
-                eliminado = departamento.eliminado,
-                IdCliente = departamento.cliente_id,
-                nombreCompania = departamento.nombre_compania,
-                nombreContacto = departamento.nombre_contacto,
-                telefono = departamento.telefono,
-                numFax = departamento.num_fax,
-                pais = departamento.pais,
-                provincia = departamento.provincia,
-                puestoContacto = departamento.puesto_contacto
-            };
+            return ClienteMapper.ToDTO(cliente);
         }
 
         public List<ClienteDTO> ObtenerTodos()
         {
             var departamentos =  _clienteData.ObtenerTodos();
 
-            return departamentos.Select(d => new ClienteDTO
-            {
-                ciudad = d.ciudad,
-                direccion = d.direccion,
-                codigoPostal = d.codigo_postal,
-                eliminado = d.eliminado,
-                IdCliente = d.cliente_id,
-                nombreCompania = d.nombre_compania,
-                nombreContacto = d.nombre_contacto,
-                telefono = d.telefono,
-                numFax = d.num_fax,
-                pais = d.pais,
-                provincia = d.provincia,
-                puestoContacto = d.puesto_contacto, 
-
-
-            }).ToList();
+            return departamentos.Select(d => ClienteMapper.ToDTO(d)).ToList();
         }
 
     }

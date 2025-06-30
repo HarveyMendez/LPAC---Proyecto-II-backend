@@ -1,5 +1,6 @@
 ﻿using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -48,22 +49,14 @@ namespace OrderFlow.Business.Servicios
         {
             var categoria = _categoriaData.VerCategoriaPorID(id);
 
-            return categoria != null ? new CategoriaDTO
-            {
-                codCategoria = categoria.cod_categoria,
-                descripcion = categoria.descripcion
-            } : null;
+            return CategoriaMapper.ToDTO(categoria);
         }
 
         public List<CategoriaDTO> VerCategorias()
         {
             var categorias = _categoriaData.VerCategorias();
 
-            return categorias.Select(c => new CategoriaDTO
-            {
-                codCategoria = c.cod_categoria,
-                descripcion = c.descripcion
-            }).ToList();
+            return categorias.Select(c => CategoriaMapper.ToDTO(c)).ToList();
         }
     }
 }

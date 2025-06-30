@@ -1,5 +1,6 @@
 ﻿using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -57,44 +58,14 @@ namespace OrderFlow.Business.Servicios
         {
             var producto = this._productoData.VerProductoPorID(id);
 
-            return new ProductoDTO
-            {
-                idProducto = producto.id_producto,
-                aplicaImpuesto = producto.aplica_impuesto,
-                cantidadExistencias = producto.cantidad_existencias,
-                eliminado = producto.eliminado,
-                nombreProducto = producto.nombre_producto,
-                precio = producto.precio,
-                puntoReorden = producto.punto_reorden,
-                talla = producto.talla,
-                categoria = new CategoriaDTO
-                {
-                    codCategoria = producto.Categoria.cod_categoria,
-                    descripcion = producto.Categoria.descripcion
-                }
-            };
+            return ProductoMapper.ToDTO(producto);
         }
 
         public List<ProductoDTO> VerProductos()
         {
             var productos =  this._productoData.VerProductos();
 
-            return productos.Select(p => new ProductoDTO
-            {
-                idProducto = p.id_producto,
-                aplicaImpuesto = p.aplica_impuesto,
-                cantidadExistencias = p.cantidad_existencias,
-                eliminado = p.eliminado,
-                nombreProducto = p.nombre_producto,
-                precio = p.precio,
-                puntoReorden = p.punto_reorden,
-                talla = p.talla,
-                categoria = new CategoriaDTO
-                {
-                    codCategoria = p.Categoria.cod_categoria,
-                    descripcion = p.Categoria.descripcion
-                }
-            }).ToList();
+            return productos.Select(p => ProductoMapper.ToDTO(p)).ToList();
         }
 
         public void Eliminar(int id)

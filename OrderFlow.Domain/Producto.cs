@@ -29,8 +29,6 @@ namespace OrderFlow.Domain
         public bool eliminado { get; set; } = false;
 
 
-
-
         // Virtual Links
 
         [MaxLength(4)]

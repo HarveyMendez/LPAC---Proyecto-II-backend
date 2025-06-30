@@ -33,6 +33,8 @@ builder.Services.AddScoped<IRolBusiness, RolBusiness>();
 builder.Services.AddScoped<IRolData, RolData>();
 builder.Services.AddScoped<IEmpleadoBusiness, EmpleadoBusiness>();
 builder.Services.AddScoped<IEmpleadoData, EmpleadoData>();
+builder.Services.AddScoped<IOrdenBusiness, OrdenBusiness>();
+builder.Services.AddScoped<IOrdenData, OrdenData>();
 
 builder.Services.AddScoped<ITokenService, GeneracionDeTokens>();
 builder.Services.AddScoped<IAuthService, AuthService>();

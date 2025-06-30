@@ -1,5 +1,6 @@
 ﻿using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -48,22 +49,14 @@ namespace OrderFlow.Business.Servicios
         {
             var departamento =  _departamentoData.ObtenerPorId(id_departamento);
 
-            return new DepartamentoDTO
-            {
-                codDepartamento = departamento.depto_cod,
-                nombreDepartamento = departamento.nombre_departament
-            };
+            return DepartamentoMapper.ToDTO(departamento);
         }
 
         public List<DepartamentoDTO> ObtenerTodos()
         {
             var departamentos = _departamentoData.ObtenerTodos();
 
-            return departamentos.Select(d => new DepartamentoDTO
-            {
-                codDepartamento = d.depto_cod,
-                nombreDepartamento = d.nombre_departament
-            }).ToList();
+            return departamentos.Select(d => DepartamentoMapper.ToDTO(d)).ToList();
         }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -61,55 +62,15 @@ namespace OrderFlow.Business.Servicios
         {
             var empleado =  _empleadoData.ObtenerPorId(id_empleado);
 
-            if(empleado != null)
-            {
-                return new EmpleadoDTO
-                {
-                    idEmpleado = empleado.id_empleado,
-                    nombreEmpleado = empleado.nombre_empleado,
-                    apellidosEmpleado = empleado.apellidos_empleado,
-                    puesto = empleado.puesto,
-                    extension = empleado.extension,
-                    telefonoTrabajo = empleado.telefono_trabajo,
-                    departamento = empleado.Departamento != null ? new DepartamentoDTO
-                    {
-                        codDepartamento = empleado.Departamento.depto_cod,
-                        nombreDepartamento = empleado.Departamento.nombre_departament
-                    } : null,
-                    rol = empleado.Rol != null ? new RolDTO
-                    {
-                        idRol = empleado.Rol.id_rol,
-                        nombreRol = empleado.Rol.nombre_rol
-                    } : null
-                };
-            }
+            return EmpleadoMapper.ToDTO(empleado);
 
-            return new EmpleadoDTO();
         }
 
         public List<EmpleadoDTO> ObtenerTodos()
         {
             var empleados = _empleadoData.ObtenerTodos();
 
-            return empleados.Select(e => new EmpleadoDTO
-            {
-                idEmpleado = e.id_empleado,
-                nombreEmpleado = e.nombre_empleado,
-                apellidosEmpleado = e.apellidos_empleado,
-                puesto = e.puesto,
-                extension = e.extension,
-                telefonoTrabajo = e.telefono_trabajo,
-                departamento = e.Departamento != null ? new DepartamentoDTO
-                {
-                    codDepartamento = e.Departamento.depto_cod,
-                    nombreDepartamento = e.Departamento.nombre_departament
-                } : null,
-                rol = e.Rol != null ? new RolDTO
-                {
-                    idRol = e.Rol.id_rol,
-                    nombreRol = e.Rol.nombre_rol
-                } : null
-            }).ToList();
+            return empleados.Select(e => EmpleadoMapper.ToDTO(e)).ToList();
         }
     }
 }
