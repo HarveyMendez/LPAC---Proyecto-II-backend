@@ -22,5 +22,14 @@ namespace OrderFlow.Business.Mappers
                 nombreRol = rol.nombre_rol
             };
         }
+
+        public static Rol ToModel(RolDTO rolDTO)
+        {
+            return new Rol
+            {
+                id_rol = rolDTO.idRol,
+                nombre_rol = rolDTO.nombreRol
+            };
+        }
     }
 }

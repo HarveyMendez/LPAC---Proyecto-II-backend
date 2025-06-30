@@ -22,5 +22,14 @@ namespace OrderFlow.Business.Mappers
                 nombreDepartamento = departamento.nombre_departament
             };
         }
+
+        public static Departamento ToModel(DepartamentoDTO departamentoDTO)
+        {
+            return new Departamento
+            {
+                depto_cod = departamentoDTO.codDepartamento,
+                nombre_departament = departamentoDTO.nombreDepartamento
+            };
+        }
     }
 }

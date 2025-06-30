@@ -22,12 +22,7 @@ namespace OrderFlow.Business.Servicios
 
         public void Crear(RolDTO rolDTO)
         {
-            var rol = new Rol
-            {
-                id_rol = rolDTO.idRol,
-                nombre_rol = rolDTO.nombreRol,
-
-            };
+            var rol = RolMapper.ToModel(rolDTO);
 
             _rolData.Crear(rol);
         }

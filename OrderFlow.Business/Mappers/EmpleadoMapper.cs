@@ -26,8 +26,30 @@ namespace OrderFlow.Business.Mappers
                 extension = empleado.extension,
                 puesto = empleado.puesto,
                 rol = RolMapper.ToDTO(empleado.Rol),
+                nombre_usuario = empleado.nombre_usuario,
+                contrasena_hash = empleado.contrasena_hash,
+                email = empleado.email
 
             };
+        }
+
+        public static Empleado ToModel(EmpleadoDTO empleadoDTO)
+        {
+            return new Empleado
+            {
+                id_empleado = empleadoDTO.idEmpleado,
+                nombre_empleado = empleadoDTO.nombreEmpleado,
+                apellidos_empleado = empleadoDTO.apellidosEmpleado,
+                telefono_trabajo = empleadoDTO.telefonoTrabajo,
+                extension = empleadoDTO.extension,
+                puesto = empleadoDTO.puesto,
+                Departamento = DepartamentoMapper.ToModel(empleadoDTO.departamento),
+                Rol = RolMapper.ToModel(empleadoDTO.rol),
+                nombre_usuario = empleadoDTO.nombre_usuario,
+                contrasena_hash = empleadoDTO.contrasena_hash,
+                email = empleadoDTO.email
+            };
+
         }
     }
 }
