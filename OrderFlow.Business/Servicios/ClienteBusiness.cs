@@ -1,4 +1,6 @@
-﻿using OrderFlow.Business.Interfaces;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -18,13 +20,42 @@ namespace OrderFlow.Business.Servicios
             _clienteData = clienteData;
         }
 
-        public void Crear(Cliente cliente)
+        public void Crear(ClienteDTO clienteDTO)
         {
+            var cliente = new Cliente
+            {
+                provincia = clienteDTO.provincia,
+                ciudad = clienteDTO.ciudad,
+                direccion = clienteDTO.direccion,
+                codigo_postal = clienteDTO.codigoPostal,
+                eliminado = false,
+                nombre_compania = clienteDTO.nombreCompania,
+                nombre_contacto = clienteDTO.nombreContacto,
+                telefono = clienteDTO.telefono,
+                num_fax = clienteDTO.numFax,
+                pais = clienteDTO.pais,
+                puesto_contacto = clienteDTO.puestoContacto
+
+            };
             _clienteData.Crear(cliente);
         }
 
-        public void Modificar(Cliente cliente)
+        public void Modificar(ClienteDTO clienteDTO)
         {
+            var cliente = _clienteData.ObtenerPorId(clienteDTO.IdCliente);
+
+            cliente.provincia = clienteDTO.provincia;
+            cliente.ciudad = clienteDTO.ciudad;
+            cliente.direccion = clienteDTO.direccion;
+            cliente.codigo_postal = clienteDTO.codigoPostal;
+            cliente.eliminado = clienteDTO.eliminado;
+            cliente.nombre_compania = clienteDTO.nombreCompania;
+            cliente.nombre_contacto = clienteDTO.nombreContacto;
+            cliente.telefono = clienteDTO.telefono;
+            cliente.num_fax = clienteDTO.numFax;
+            cliente.pais = clienteDTO.pais;
+            cliente.puesto_contacto = clienteDTO.puestoContacto;
+
             _clienteData.Modificar(cliente);
         }
 
@@ -33,14 +64,18 @@ namespace OrderFlow.Business.Servicios
             _clienteData.Eliminar(id_cliente);
         }
 
-        public Cliente ObtenerPorId(int id_cliente)
+        public ClienteDTO ObtenerPorId(int id_cliente)
         {
-            return _clienteData.ObtenerPorId(id_cliente);   
+            var cliente = _clienteData.ObtenerPorId(id_cliente);   
+
+            return ClienteMapper.ToDTO(cliente);
         }
 
-        public List<Cliente> ObtenerTodos()
+        public List<ClienteDTO> ObtenerTodos()
         {
-            return _clienteData.ObtenerTodos();
+            var departamentos =  _clienteData.ObtenerTodos();
+
+            return departamentos.Select(d => ClienteMapper.ToDTO(d)).ToList();
         }
 
     }

@@ -16,31 +16,16 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpGet]
-        public List<ProductoDTO> VerProductos()
+        public ActionResult<List<ProductoDTO>> VerProductos()
         {
             var productos = _productoBusiness.VerProductos();
 
             if (productos == null || !productos.Any())
             {
-                return new List<ProductoDTO>();
+                return NotFound();
             }
 
-            return productos.Select(p => new ProductoDTO
-            {
-                idProducto = p.id_producto,
-                nombreProducto = p.nombre_producto,
-                precio = p.precio,
-                categoria = new CategoriaDTO
-                {
-                    codCategoria = p.cod_categoria,
-                    descripcion = p.Categoria.descripcion,
-                },
-                cantidadExistencias = p.cantidad_existencias,
-                puntoReorden = p.punto_reorden,
-                aplicaImpuesto = p.aplica_impuesto,
-                talla = p.talla,
-                eliminado = p.eliminado
-            }).ToList();
+            return Ok(productos);
 
         }
 
@@ -53,22 +38,8 @@ namespace OrderFlow.API.Controllers
             {
                 return NotFound();
             }
-            return new ProductoDTO
-            {
-                idProducto = producto.id_producto,
-                nombreProducto = producto.nombre_producto,
-                precio = producto.precio,
-                categoria = new CategoriaDTO
-                {
-                    codCategoria = producto.cod_categoria,
-                    descripcion = producto.Categoria?.descripcion ?? string.Empty,
-                },
-                cantidadExistencias = producto.cantidad_existencias,
-                puntoReorden = producto.punto_reorden,
-                aplicaImpuesto = producto.aplica_impuesto,
-                talla = producto.talla,
-                eliminado = producto.eliminado
-            };
+
+            return Ok(producto);
         }
 
         [HttpPost]
@@ -79,22 +50,16 @@ namespace OrderFlow.API.Controllers
                 return BadRequest("Producto no puede ser nulo.");
             }
 
-            var producto = new OrderFlow.Domain.Producto
+            try
             {
-                nombre_producto = productoDto.nombreProducto,
-                precio = productoDto.precio,
-                cantidad_existencias = productoDto.cantidadExistencias,
-                punto_reorden = productoDto.puntoReorden,
-                aplica_impuesto = productoDto.aplicaImpuesto,
-                talla = productoDto.talla,
-                eliminado = productoDto.eliminado,
-                cod_categoria = productoDto.categoria.codCategoria
+                _productoBusiness.Crear(productoDto);
 
-            };
-
-            _productoBusiness.Crear(producto);
-
-            return CreatedAtAction(nameof(VerProductoPorID), new { id = producto.id_producto }, producto);
+                return Ok(productoDto);
+                
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al crear producto: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
@@ -107,38 +72,45 @@ namespace OrderFlow.API.Controllers
 
             var producto = _productoBusiness.VerProductoPorID(id);
 
-            if (producto == null)
+            if(producto == null)
             {
-                return NotFound();
+                return BadRequest("El producto no puede ser nulo");
             }
 
-            producto.nombre_producto = productoDto.nombreProducto;
-            producto.precio = productoDto.precio;
-            producto.cantidad_existencias = productoDto.cantidadExistencias;
-            producto.punto_reorden = productoDto.puntoReorden;
-            producto.aplica_impuesto = productoDto.aplicaImpuesto;
-            producto.talla = productoDto.talla;
-            producto.eliminado = productoDto.eliminado;
-            producto.cod_categoria = productoDto.categoria.codCategoria;
+            try
+            {
+                _productoBusiness.Modificar(productoDto);
 
-            _productoBusiness.Modificar(producto);
-
-            return NoContent();
+                return Ok(productoDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al modificar producto: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
-        public ActionResult Delete(int id)
+        public IActionResult Delete(int id)
         {
             var producto = _productoBusiness.VerProductoPorID(id);
 
             if (producto == null)
             {
-                return NotFound();
+                return NotFound($"No se encontro el producto con ID: {id}");
 
             }
-            _productoBusiness.Eliminar(id);
 
-            return NoContent();
+            try
+            {
+                _productoBusiness.Eliminar(id);
+
+                return Ok($"Producto con ID: {id} eliminado");
+            }
+            catch (Exception ex) 
+            {
+                return BadRequest($"Error al eliminar producto: {ex.Message}");
+            }
+            
         }
 
     }

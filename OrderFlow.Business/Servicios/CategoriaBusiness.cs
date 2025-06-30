@@ -1,4 +1,6 @@
-﻿using OrderFlow.Business.Interfaces;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -18,8 +20,14 @@ namespace OrderFlow.Business.Servicios
             _categoriaData = categoriaData;
         }
 
-        public void Crear(Categoria categoria)
+        public void Crear(CategoriaDTO categoriaDTO)
         {
+            var categoria = new Categoria
+            {
+                cod_categoria = categoriaDTO.codCategoria,
+                descripcion = categoriaDTO.descripcion
+            };
+
             _categoriaData.Crear(categoria);
         }
 
@@ -28,19 +36,27 @@ namespace OrderFlow.Business.Servicios
             _categoriaData.Eliminar(id);
         }
 
-        public void Modificar(Categoria categoria)
+        public void Modificar(CategoriaDTO categoria)
         {
-            _categoriaData.Modificar(categoria);
+            var categoriaExistente = _categoriaData.VerCategoriaPorID(categoria.codCategoria);
+
+            categoriaExistente.descripcion = categoria.descripcion;
+
+            _categoriaData.Modificar(categoriaExistente);
         }
 
-        public Categoria VerCategoriaPorID(string id)
+        public CategoriaDTO VerCategoriaPorID(string id)
         {
-            return  _categoriaData.VerCategoriaPorID(id);
+            var categoria = _categoriaData.VerCategoriaPorID(id);
+
+            return CategoriaMapper.ToDTO(categoria);
         }
 
-        public List<Categoria> VerCategorias()
+        public List<CategoriaDTO> VerCategorias()
         {
-            return _categoriaData.VerCategorias();
+            var categorias = _categoriaData.VerCategorias();
+
+            return categorias.Select(c => CategoriaMapper.ToDTO(c)).ToList();
         }
     }
 }

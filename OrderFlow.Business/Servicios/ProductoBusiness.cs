@@ -1,4 +1,6 @@
-﻿using OrderFlow.Business.Interfaces;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -18,24 +20,52 @@ namespace OrderFlow.Business.Servicios
             _productoData = productoData;
         }
 
-        public void Crear(Producto producto)
+        public void Crear(ProductoDTO productoDTO)
         {
+            var producto = new Producto
+            {
+                precio = productoDTO.precio,
+                nombre_producto = productoDTO.nombreProducto,
+                cantidad_existencias = productoDTO.cantidadExistencias,
+                talla = productoDTO.talla,
+                punto_reorden = productoDTO.puntoReorden,
+                aplica_impuesto = productoDTO.aplicaImpuesto,
+                eliminado = productoDTO.eliminado,
+                cod_categoria = productoDTO.categoria.codCategoria,
+            };
+
             this._productoData.Crear(producto);
         }
 
-        public void Modificar(Producto producto)
+        public void Modificar(ProductoDTO producto)
         {
-            this._productoData.Modificar(producto);
+            var productoExistente = _productoData.VerProductoPorID(producto.idProducto);
+
+            productoExistente.precio = producto.precio;
+            productoExistente.nombre_producto = producto.nombreProducto;
+            productoExistente.cantidad_existencias = producto.cantidadExistencias;
+            productoExistente.talla = producto.talla;
+            productoExistente.punto_reorden = producto.puntoReorden;
+            productoExistente.aplica_impuesto = producto.aplicaImpuesto;
+            productoExistente.eliminado = producto.eliminado;
+            productoExistente.Categoria.cod_categoria = producto.categoria.codCategoria;
+            productoExistente.Categoria.descripcion = producto.categoria.descripcion;
+
+            this._productoData.Modificar(productoExistente);
         }
 
-        public Producto VerProductoPorID(int id)
+        public ProductoDTO VerProductoPorID(int id)
         {
-            return this._productoData.VerProductoPorID(id);
+            var producto = this._productoData.VerProductoPorID(id);
+
+            return ProductoMapper.ToDTO(producto);
         }
 
-        public List<Producto> VerProductos()
+        public List<ProductoDTO> VerProductos()
         {
-            return this._productoData.VerProductos();
+            var productos =  this._productoData.VerProductos();
+
+            return productos.Select(p => ProductoMapper.ToDTO(p)).ToList();
         }
 
         public void Eliminar(int id)

@@ -1,4 +1,6 @@
-﻿using OrderFlow.Business.Interfaces;
+﻿using OrderFlow.API.DTO;
+using OrderFlow.Business.Interfaces;
+using OrderFlow.Business.Mappers;
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using System;
@@ -18,8 +20,10 @@ namespace OrderFlow.Business.Servicios
             _rolData = rolData;
         }
 
-        public void Crear(Rol rol)
+        public void Crear(RolDTO rolDTO)
         {
+            var rol = RolMapper.ToModel(rolDTO);
+
             _rolData.Crear(rol);
         }
 
@@ -28,19 +32,27 @@ namespace OrderFlow.Business.Servicios
             _rolData.Eliminar(id);
         }
 
-        public void Modificar(Rol rol)
+        public void Modificar(RolDTO rolDTO)
         {
+            var rol = _rolData.ObtenerPorId(rolDTO.idRol);
+
+            rol.nombre_rol = rolDTO.nombreRol;
+
             _rolData.Modificar(rol);
         }
 
-        public List<Rol> VerRoles()
+        public List<RolDTO> VerRoles()
         {
-            return _rolData.ObtenerTodos();
+            var roles =  _rolData.ObtenerTodos();
+
+            return roles.Select(r => RolMapper.ToDTO(r)).ToList();
         }
 
-        public Rol VerRolPorID(int id)
+        public RolDTO VerRolPorID(int id)
         {
-            return _rolData.ObtenerPorId(id);
+            var rol = _rolData.ObtenerPorId(id);
+
+            return RolMapper.ToDTO(rol);
         }
     }
 }

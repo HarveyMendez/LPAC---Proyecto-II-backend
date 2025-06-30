@@ -2,6 +2,7 @@
 using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using OrderFlow.Business.Interfaces;
+using OrderFlow.API.DTO;
 
 
 namespace OrderFlow.API.Controllers
@@ -17,7 +18,7 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpGet]
-        public IActionResult ObtenerTodos()
+        public ActionResult<List<RolDTO>> ObtenerTodos()
         {
             var roles = _rolBusiness.VerRoles();
 
@@ -30,7 +31,7 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult ObtenerPorId(int id)
+        public ActionResult<RolDTO> ObtenerPorId(int id)
         {
             var rol = _rolBusiness.VerRolPorID(id);
 
@@ -43,22 +44,31 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult Crear([FromBody] Rol rol)
+        public IActionResult Crear([FromBody] RolDTO rol)
         {
             if (rol == null)
             {
                 return BadRequest("El rol no puede ser nulo.");
             }
 
-            _rolBusiness.Crear(rol);
+            try
+            {
 
-            return CreatedAtAction(nameof(ObtenerPorId), new { id = rol.id_rol }, rol);
+                _rolBusiness.Crear(rol);
+
+                return Ok(rol);
+
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al crear rol: {ex.Message}");
+            }
+
         }
 
         [HttpPut("{id}")]
-        public IActionResult Modificar(int id, [FromBody] Rol rol)
+        public IActionResult Modificar(int id, [FromBody] RolDTO rol)
         {
-            if (rol == null || rol.id_rol != id)
+            if (rol == null || rol.idRol != id)
             {
                 return BadRequest("El rol no es válido o el ID no coincide.");
             }
@@ -70,11 +80,18 @@ namespace OrderFlow.API.Controllers
                 return NotFound($"No se encontró el rol con ID {id}.");
             }
 
-            rolExistente.nombre_rol = rol.nombre_rol;
+            try
+            {
+                _rolBusiness.Modificar(rol);
 
-            _rolBusiness.Modificar(rol);
+                return Ok(rol);
 
-            return NoContent();
+            } catch (Exception ex)
+            {
+                return BadRequest($"Error al modificar rol: {ex.Message}");
+            }
+
+
         }
 
         [HttpDelete("{id}")]
@@ -87,9 +104,18 @@ namespace OrderFlow.API.Controllers
                 return NotFound($"No se encontró el rol con ID {id}.");
             }
 
-            _rolBusiness.Eliminar(id);
+            try
+            {
+                _rolBusiness.Eliminar(id);
 
-            return NoContent();
+                return Ok($"Rol con ID: {id} eliminado correctamente");
+
+            } catch (Exception ex)
+            {
+                return BadRequest($"Error al eliminar rol: {ex.Message}");
+            }
+
+
         }
     }
 }

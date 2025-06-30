@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderFlow.API.DTO;
-using OrderFlow.Data.Interfaces;
-using OrderFlow.Domain;
+using OrderFlow.Business.Interfaces;
+
 
 namespace OrderFlow.API.Controllers
 {
@@ -9,63 +9,38 @@ namespace OrderFlow.API.Controllers
     [Route("api/[controller]")]
     public class ClienteController : Controller
     {
-        private readonly IClienteData _clienteData;
+        private readonly IClienteBusiness _clienteBusiness;
 
-        public ClienteController(IClienteData clienteData)
+        public ClienteController(IClienteBusiness clienteBusiness)
         {
-            _clienteData = clienteData;
+            _clienteBusiness = clienteBusiness;
         }
 
         [HttpGet]
-        public List<ClienteDTO> VerClientes()
+        public ActionResult<List<ClienteDTO>> VerClientes()
         {
-            var clientes = _clienteData.ObtenerTodos();
+            var clientes = _clienteBusiness.ObtenerTodos();
 
             if (clientes == null || !clientes.Any())
             {
-                return new List<ClienteDTO>();
+                return NotFound();
             }
 
-            return clientes.Select(c => new ClienteDTO
-            {
-                IdCliente = c.cliente_id,
-                nombreCompania = c.nombre_compania,
-                nombreContacto = c.nombre_contacto,
-                puestoContacto = c.puesto_contacto,
-                direccion = c.direccion,
-                ciudad = c.ciudad,
-                provincia = c.provincia,
-                codigoPostal = c.codigo_postal,
-                pais = c.pais,
-                telefono = c.telefono,
-                numFax = c.num_fax,
-                eliminado = c.eliminado
-            }).ToList();
+            return Ok(clientes);
+            
         }
 
         [HttpGet("{id}")]
         public ActionResult<ClienteDTO> VerClientePorID(int id)
         {
-            var cliente = _clienteData.ObtenerPorId(id);
+            var cliente = _clienteBusiness.ObtenerPorId(id);
+
             if (cliente == null)
             {
                 return NotFound();
             }
-            return new ClienteDTO
-            {
-                IdCliente = cliente.cliente_id,
-                nombreCompania = cliente.nombre_compania,
-                nombreContacto = cliente.nombre_contacto,
-                puestoContacto = cliente.puesto_contacto,
-                direccion = cliente.direccion,
-                ciudad = cliente.ciudad,
-                provincia = cliente.provincia,
-                codigoPostal = cliente.codigo_postal,
-                pais = cliente.pais,
-                telefono = cliente.telefono,
-                numFax = cliente.num_fax,
-                eliminado = cliente.eliminado
-            };
+
+            return Ok(cliente);
         }
 
         [HttpPost]
@@ -75,22 +50,17 @@ namespace OrderFlow.API.Controllers
             {
                 return BadRequest("Datos de cliente inválidos.");
             }
-            var cliente = new Cliente
+
+            try
             {
-                nombre_compania = clienteDto.nombreCompania,
-                nombre_contacto = clienteDto.nombreContacto,
-                puesto_contacto = clienteDto.puestoContacto,
-                direccion = clienteDto.direccion,
-                ciudad = clienteDto.ciudad,
-                provincia = clienteDto.provincia,
-                codigo_postal = clienteDto.codigoPostal,
-                pais = clienteDto.pais,
-                telefono = clienteDto.telefono,
-                num_fax = clienteDto.numFax,
-                eliminado = clienteDto.eliminado
-            };
-            _clienteData.Crear(cliente);
-            return CreatedAtAction(nameof(VerClientePorID), new { id = cliente.cliente_id }, cliente);
+                _clienteBusiness.Crear(clienteDto);
+
+                return Ok(clienteDto);
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al crear cliente: {ex.Message}");
+            }
         }
 
         [HttpPut("{id}")]
@@ -100,40 +70,46 @@ namespace OrderFlow.API.Controllers
             {
                 return BadRequest("Datos de cliente inválidos.");
             }
-            var clienteExistente = _clienteData.ObtenerPorId(id);
+            var clienteExistente = _clienteBusiness.ObtenerPorId(id);
 
             if (clienteExistente == null)
             {
                 return NotFound();
             }
-            
-            clienteExistente.telefono = clienteDto.telefono;
-            clienteExistente.num_fax = clienteDto.numFax;
-            clienteExistente.nombre_compania = clienteDto.nombreCompania;
-            clienteExistente.nombre_contacto = clienteDto.nombreContacto;
-            clienteExistente.puesto_contacto = clienteDto.puestoContacto;
-            clienteExistente.direccion = clienteDto.direccion;
-            clienteExistente.ciudad = clienteDto.ciudad;
-            clienteExistente.provincia = clienteDto.provincia;
-            clienteExistente.codigo_postal = clienteDto.codigoPostal;
-            clienteExistente.pais = clienteDto.pais;
-            clienteExistente.eliminado = clienteDto.eliminado;
 
-            _clienteData.Modificar(clienteExistente);
+            try
+            {
+                _clienteBusiness.Modificar(clienteExistente);
 
-            return NoContent();
+                return Ok(clienteDto);
+
+            }
+            catch (Exception ex)
+            {
+                return BadRequest($"Error al modificar cliente: {ex.Message}");
+            }
         }
 
         [HttpDelete("{id}")]
         public IActionResult EliminarCliente(int id)
         {
-            var clienteExistente = _clienteData.ObtenerPorId(id);
+            var clienteExistente = _clienteBusiness.ObtenerPorId(id);
+
             if (clienteExistente == null)
             {
                 return NotFound();
             }
-            _clienteData.Eliminar(id);
-            return NoContent();
+
+            try
+            {
+                _clienteBusiness.Eliminar(id);
+
+                return Ok($"Cliente con ID: {id} eliminado correctamente");
+
+            } catch(Exception ex)
+            {
+                return BadRequest($"Error al eliminar cliente: {ex.Message}");
+            }
         }
     }
 }
