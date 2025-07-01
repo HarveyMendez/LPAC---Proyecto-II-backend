@@ -22,7 +22,8 @@ namespace OrderFlow.Business.Servicios
 
         public void Crear(RolDTO rolDTO)
         {
-            var rol = RolMapper.ToModel(rolDTO);
+            // el mapper hace un new, por lo tanto entity lo considerara como objeto nuevo
+            var rol = RolMapper.ToModel(rolDTO); 
 
             _rolData.Crear(rol);
         }

@@ -43,11 +43,13 @@ namespace OrderFlow.Business.Mappers
                 telefono_trabajo = empleadoDTO.telefonoTrabajo,
                 extension = empleadoDTO.extension,
                 puesto = empleadoDTO.puesto,
-                Departamento = DepartamentoMapper.ToModel(empleadoDTO.departamento),
-                Rol = RolMapper.ToModel(empleadoDTO.rol),
+                //Departamento = DepartamentoMapper.ToModel(empleadoDTO.departamento),
+                //Rol = RolMapper.ToModel(empleadoDTO.rol),
                 nombre_usuario = empleadoDTO.nombre_usuario,
                 contrasena_hash = empleadoDTO.contrasena_hash,
-                email = empleadoDTO.email
+                email = empleadoDTO.email,
+                depto_cod = empleadoDTO.departamento.codDepartamento,
+                id_rol = empleadoDTO.rol.idRol
             };
 
         }
