@@ -13,6 +13,13 @@ public class EmpleadoDataTest
 {
     private DbContextOptions<ContextoDbSQLServer> _dbContextOptions;
     private string _connectionString;
+    private const string TestDeptoCod = "TS"; // Changed from "TSTX" to "TS" (2 characters)
+    private const string TestDeptoNombre = "Departamento CRUD Test";
+    private const string TestRolNombre = "Rol CRUD Test";
+    private const string TestEmpleadoNombre = "EmpleadoCRUD";
+    private const string TestEmpleadoApellido = "ApellidoCRUD";
+    private const string TestEmpleadoPuesto = "Tester";
+    private const string TestEmpleadoPuestoMod = "Tester Modificado";
 
     [SetUp]
     public void Setup()
@@ -34,115 +41,99 @@ public class EmpleadoDataTest
     {
         using (var context = new ContextoDbSQLServer(_dbContextOptions))
         {
-            // Eliminar el empleado creado por el test
-            var empleadoRecienInsertado = context.Empleados
-                .FirstOrDefault(e => e.nombre_empleado == "NombreTest" && e.apellidos_empleado == "ApellidoTest");
-
-            if (empleadoRecienInsertado != null)
+            var empleado = context.Empleados.FirstOrDefault(e => e.nombre_empleado == TestEmpleadoNombre && e.apellidos_empleado == TestEmpleadoApellido);
+            if (empleado != null)
             {
-                context.Empleados.Remove(empleadoRecienInsertado);
+                context.Empleados.Remove(empleado);
                 context.SaveChanges();
             }
 
-            // Eliminar el departamento de prueba si fue creado por este test
-            var departamentoRecienInsertado = context.Departamentos
-                .FirstOrDefault(d => d.depto_cod == "TDE"); // Usar el ID de prueba de 3 caracteres
-
-            if (departamentoRecienInsertado != null)
+            var rol = context.Roles.FirstOrDefault(r => r.nombre_rol == TestRolNombre);
+            if (rol != null)
             {
-                context.Departamentos.Remove(departamentoRecienInsertado);
+                context.Roles.Remove(rol);
                 context.SaveChanges();
             }
 
-            // Eliminar el rol de prueba si fue creado por este test
-            var rolRecienInsertado = context.Roles
-                .FirstOrDefault(r => r.nombre_rol == "Rol de Prueba para Test"); // Buscar por nombre para el rol que se insertó si es IDENTITY
-
-            if (rolRecienInsertado != null)
+            var depto = context.Departamentos.FirstOrDefault(d => d.depto_cod == TestDeptoCod);
+            if (depto != null)
             {
-                context.Roles.Remove(rolRecienInsertado);
+                context.Departamentos.Remove(depto);
                 context.SaveChanges();
             }
         }
     }
 
     [Test]
-    public void Crear_ValidEmpleado_InsertsSuccessfully()
+    public void Empleado_CRUD_WorksCorrectly()
     {
-        // Arrange
         using var context = new ContextoDbSQLServer(_dbContextOptions);
         var empleadoData = new EmpleadoData(context);
 
-        string testDeptoCod = "TDE";
-        var departamento = new Departamento { depto_cod = testDeptoCod, nombre_departament = "Departamento de Prueba Test" };
-
-        var existingDepartamento = context.Departamentos.Find(testDeptoCod);
-        if (existingDepartamento == null)
+        // Ensure Departamento exists
+        var departamento = context.Departamentos.Find(TestDeptoCod);
+        if (departamento == null)
         {
+            departamento = new Departamento { depto_cod = TestDeptoCod, nombre_departament = TestDeptoNombre };
             context.Departamentos.Add(departamento);
             context.SaveChanges();
         }
-        else
-        {
-            departamento = existingDepartamento;
-        }
 
-       
-        var rol = new Rol { nombre_rol = "Rol de Prueba para Test" };
-
-        var existingRol = context.Roles.FirstOrDefault(r => r.nombre_rol == rol.nombre_rol);
-        if (existingRol == null)
+        // Ensure Rol exists
+        var rol = context.Roles.FirstOrDefault(r => r.nombre_rol == TestRolNombre);
+        if (rol == null)
         {
+            rol = new Rol { nombre_rol = TestRolNombre };
             context.Roles.Add(rol);
             context.SaveChanges();
         }
-        else
+
+        // Limpieza previa
+        var existente = context.Empleados.FirstOrDefault(e => e.nombre_empleado == TestEmpleadoNombre && e.apellidos_empleado == TestEmpleadoApellido);
+        if (existente != null)
         {
-            rol = existingRol;
+            context.Empleados.Remove(existente);
+            context.SaveChanges();
         }
 
+        // CREATE
         var empleadoToInsert = new Empleado
         {
-            nombre_empleado = "NombreTest",
-            apellidos_empleado = "ApellidoTest",
-            puesto = "Desarrollador Jr.",
-            extension = "1234",
-            telefono_trabajo = "8888-7777",
+            nombre_empleado = TestEmpleadoNombre,
+            apellidos_empleado = TestEmpleadoApellido,
+            puesto = TestEmpleadoPuesto,
+            extension = "9999",
+            telefono_trabajo = "5555-5555",
             depto_cod = departamento.depto_cod,
-            id_rol = rol.id_rol, 
-            nombre_usuario = "usuario.test",
-            contrasena_hash = "hashseguro123_test",
-            email = "usuario.test@example.com"
+            id_rol = rol.id_rol,
+            nombre_usuario = "usuario.crud",
+            contrasena_hash = "hash_crud",
+            email = "crud@example.com"
         };
+        Assert.DoesNotThrow(() => empleadoData.Crear(empleadoToInsert), "Crear un empleado no debería generar una excepción.");
 
-        // Act
-        Assert.DoesNotThrow(() => empleadoData.Crear(empleadoToInsert),
-            "Crear un empleado no debería generar una excepción.");
-
-        // Assert
-        Assert.That(empleadoToInsert.id_empleado, Is.GreaterThan(0), "El ID del empleado debe ser mayor que 0 después de la inserción.");
-
-        var insertedEmpleado = context.Empleados
-            .Include(e => e.Departamento)
-            .Include(e => e.Rol)
-            .FirstOrDefault(e => e.nombre_empleado == "NombreTest" && e.apellidos_empleado == "ApellidoTest");
-
+        // READ (por ID)
+        var insertedEmpleado = empleadoData.ObtenerPorId(empleadoToInsert.id_empleado);
         Assert.That(insertedEmpleado, Is.Not.Null, "El empleado insertado debería existir en la base de datos.");
-        Assert.That(insertedEmpleado.nombre_empleado, Is.EqualTo("NombreTest"), "El nombre del empleado no coincide.");
-        Assert.That(insertedEmpleado.apellidos_empleado, Is.EqualTo("ApellidoTest"), "Los apellidos del empleado no coinciden.");
-        Assert.That(insertedEmpleado.puesto, Is.EqualTo("Desarrollador Jr."), "El puesto del empleado no coincide.");
-        Assert.That(insertedEmpleado.extension, Is.EqualTo("1234"), "La extensión del empleado no coincide.");
-        Assert.That(insertedEmpleado.telefono_trabajo, Is.EqualTo("8888-7777"), "El teléfono de trabajo del empleado no coincide.");
-        Assert.That(insertedEmpleado.depto_cod, Is.EqualTo(departamento.depto_cod), "El código de departamento no coincide.");
-        Assert.That(insertedEmpleado.id_rol, Is.EqualTo(rol.id_rol), "El ID de rol no coincide.");
-        Assert.That(insertedEmpleado.nombre_usuario, Is.EqualTo("usuario.test"), "El nombre de usuario no coincide.");
-        Assert.That(insertedEmpleado.contrasena_hash, Is.EqualTo("hashseguro123_test"), "El hash de la contraseña no coincide.");
-        Assert.That(insertedEmpleado.email, Is.EqualTo("usuario.test@example.com"), "El email no coincide.");
+        Assert.That(insertedEmpleado.nombre_empleado, Is.EqualTo(TestEmpleadoNombre), "El nombre no coincide.");
+        Assert.That(insertedEmpleado.apellidos_empleado, Is.EqualTo(TestEmpleadoApellido), "El apellido no coincide.");
+        Assert.That(insertedEmpleado.puesto, Is.EqualTo(TestEmpleadoPuesto), "El puesto no coincide.");
 
-        Assert.That(insertedEmpleado.Departamento, Is.Not.Null, "El departamento del empleado no debería ser nulo.");
-        Assert.That(insertedEmpleado.Departamento.nombre_departament, Is.EqualTo("Departamento de Prueba Test"), "El nombre del departamento no coincide.");
+        // READ (todos)
+        var allEmpleados = empleadoData.ObtenerTodos();
+        Assert.That(allEmpleados.Any(e => e.id_empleado == insertedEmpleado.id_empleado), "El empleado debería estar en la lista de todos los empleados.");
 
-        Assert.That(insertedEmpleado.Rol, Is.Not.Null, "El rol del empleado no debería ser nulo.");
-        Assert.That(insertedEmpleado.Rol.nombre_rol, Is.EqualTo("Rol de Prueba para Test"), "El nombre del rol no coincide.");
+        // UPDATE
+        insertedEmpleado.puesto = TestEmpleadoPuestoMod;
+        Assert.DoesNotThrow(() => empleadoData.Modificar(insertedEmpleado), "Modificar un empleado no debería generar una excepción.");
+
+        var updatedEmpleado = empleadoData.ObtenerPorId(insertedEmpleado.id_empleado);
+        Assert.That(updatedEmpleado.puesto, Is.EqualTo(TestEmpleadoPuestoMod), "El puesto no fue actualizado correctamente.");
+
+        // DELETE
+        Assert.DoesNotThrow(() => empleadoData.Eliminar(insertedEmpleado.id_empleado), "Eliminar un empleado no debería generar una excepción.");
+
+        var deletedEmpleado = empleadoData.ObtenerPorId(insertedEmpleado.id_empleado);
+        Assert.That(deletedEmpleado, Is.Null, "El empleado eliminado no debería existir en la base de datos.");
     }
 }

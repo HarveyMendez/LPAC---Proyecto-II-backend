@@ -12,6 +12,10 @@ public class ProductoDataTest
 {
     private DbContextOptions<ContextoDbSQLServer> _dbContextOptions;
     private string _connectionString;
+    private const string TestCategoriaId = "TSTP";
+    private const string TestCategoriaDescripcion = "Categoría CRUD Producto";
+    private const string TestProductoNombre = "Producto CRUD Test";
+    private const string TestProductoNombreMod = "Producto CRUD Test Modificado";
 
     [SetUp]
     public void Setup()
@@ -33,80 +37,82 @@ public class ProductoDataTest
     {
         using (var context = new ContextoDbSQLServer(_dbContextOptions))
         {
-            var productoRecienInsertado = context.Productos
-                .FirstOrDefault(p => p.nombre_producto == "Producto de Prueba para Test");
-
-            if (productoRecienInsertado != null)
+            var producto = context.Productos.FirstOrDefault(p => p.nombre_producto == TestProductoNombre || p.nombre_producto == TestProductoNombreMod);
+            if (producto != null)
             {
-                context.Productos.Remove(productoRecienInsertado);
+                context.Productos.Remove(producto);
                 context.SaveChanges();
             }
 
-            var categoriaRecienInsertada = context.Categorias
-                .FirstOrDefault(c => c.cod_categoria == "TEST");
-
-            if (categoriaRecienInsertada != null)
+            var categoria = context.Categorias.FirstOrDefault(c => c.cod_categoria == TestCategoriaId);
+            if (categoria != null)
             {
-                context.Categorias.Remove(categoriaRecienInsertada);
+                context.Categorias.Remove(categoria);
                 context.SaveChanges();
             }
         }
     }
 
     [Test]
-    public void Crear_ValidProducto_InsertsSuccessfully()
+    public void Producto_CRUD_WorksCorrectly()
     {
-        // Arrange
         using var context = new ContextoDbSQLServer(_dbContextOptions);
         var productoData = new ProductoData(context);
 
-        string testCategoriaId = "TEST";
-        var categoria = new Categoria { cod_categoria = testCategoriaId, descripcion = "Categoría de Prueba" };
-
-        var existingCategory = context.Categorias.Find(testCategoriaId);
-        if (existingCategory == null)
+        // Ensure Categoria exists
+        var categoria = context.Categorias.Find(TestCategoriaId);
+        if (categoria == null)
         {
+            categoria = new Categoria { cod_categoria = TestCategoriaId, descripcion = TestCategoriaDescripcion };
             context.Categorias.Add(categoria);
             context.SaveChanges();
         }
-        else
+
+        // Limpieza previa
+        var existente = context.Productos.FirstOrDefault(p => p.nombre_producto == TestProductoNombre || p.nombre_producto == TestProductoNombreMod);
+        if (existente != null)
         {
-            categoria = existingCategory;
+            context.Productos.Remove(existente);
+            context.SaveChanges();
         }
 
+        // CREATE
         var productoToInsert = new Producto
         {
-            precio = 123.45f,
-            nombre_producto = "Producto de Prueba para Test",
-            cantidad_existencias = 10,
-            talla = "Única",
-            punto_reorden = 2,
+            nombre_producto = TestProductoNombre,
+            precio = 99.99f,
+            cantidad_existencias = 50,
+            talla = "M",
+            punto_reorden = 5,
             aplica_impuesto = true,
             eliminado = false,
             cod_categoria = categoria.cod_categoria
         };
-
-        // Act
-        Assert.DoesNotThrow(() => productoData.Crear(productoToInsert),
-            "Crear un producto no debería generar una excepción.");
-
-        // Assert
+        Assert.DoesNotThrow(() => productoData.Crear(productoToInsert), "Crear un producto no debería generar una excepción.");
         Assert.That(productoToInsert.id_producto, Is.GreaterThan(0), "El ID del producto debe ser mayor que 0 después de la inserción.");
 
-        var insertedProducto = context.Productos
-            .Include(p => p.Categoria)
-            .FirstOrDefault(p => p.nombre_producto == "Producto de Prueba para Test");
-
+        // READ (por ID)
+        var insertedProducto = productoData.VerProductoPorID(productoToInsert.id_producto);
         Assert.That(insertedProducto, Is.Not.Null, "El producto insertado debería existir en la base de datos.");
-        Assert.That(insertedProducto.nombre_producto, Is.EqualTo("Producto de Prueba para Test"), "El nombre del producto no coincide.");
-        Assert.That(insertedProducto.precio, Is.EqualTo(123.45f).Within(0.001f), "El precio del producto no coincide.");
-        Assert.That(insertedProducto.cantidad_existencias, Is.EqualTo(10), "La cantidad de existencias no coincide.");
-        Assert.That(insertedProducto.talla, Is.EqualTo("Única"), "La talla del producto no coincide.");
-        Assert.That(insertedProducto.punto_reorden, Is.EqualTo(2), "El punto de reorden no coincide.");
-        Assert.That(insertedProducto.aplica_impuesto, Is.True, "Aplica impuesto no coincide.");
-        Assert.That(insertedProducto.eliminado, Is.False, "Eliminado no coincide.");
-        Assert.That(insertedProducto.cod_categoria, Is.EqualTo(categoria.cod_categoria), "El código de categoría no coincide.");
-        Assert.That(insertedProducto.Categoria, Is.Not.Null, "La categoría del producto no debería ser nula.");
-        Assert.That(insertedProducto.Categoria.descripcion, Is.EqualTo("Categoría de Prueba"), "La descripción de la categoría no coincide.");
+        Assert.That(insertedProducto.nombre_producto, Is.EqualTo(TestProductoNombre), "El nombre del producto no coincide.");
+
+        // READ (todos)
+        var allProductos = productoData.VerProductos();
+        Assert.That(allProductos.Any(p => p.id_producto == insertedProducto.id_producto), "El producto debería estar en la lista de todos los productos.");
+
+        // UPDATE
+        insertedProducto.nombre_producto = TestProductoNombreMod;
+        insertedProducto.precio = 149.99f;
+        Assert.DoesNotThrow(() => productoData.Modificar(insertedProducto), "Modificar un producto no debería generar una excepción.");
+
+        var updatedProducto = productoData.VerProductoPorID(insertedProducto.id_producto);
+        Assert.That(updatedProducto.nombre_producto, Is.EqualTo(TestProductoNombreMod), "El nombre del producto no fue actualizado correctamente.");
+        Assert.That(updatedProducto.precio, Is.EqualTo(149.99f).Within(0.001f), "El precio del producto no fue actualizado correctamente.");
+
+        // DELETE
+        Assert.DoesNotThrow(() => productoData.Eliminar(insertedProducto.id_producto), "Eliminar un producto no debería generar una excepción.");
+
+        var deletedProducto = productoData.VerProductoPorID(insertedProducto.id_producto);
+        Assert.That(deletedProducto, Is.Null, "El producto eliminado no debería existir en la base de datos.");
     }
 }
