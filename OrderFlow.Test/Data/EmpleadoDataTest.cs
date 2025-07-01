@@ -25,7 +25,6 @@ public class EmpleadoDataTest
 
         using (var context = new ContextoDbSQLServer(_dbContextOptions))
         {
-            // Opcional: Asegurarse de que la DB exista. Para una DB de la U, esto ya debería estar.
             context.Database.EnsureCreated();
         }
     }
@@ -74,8 +73,6 @@ public class EmpleadoDataTest
         using var context = new ContextoDbSQLServer(_dbContextOptions);
         var empleadoData = new EmpleadoData(context);
 
-        // --- Manejo del Departamento de Prueba ---
-        // Usar un cod_depto de 3 caracteres si la columna en DB es VARCHAR(3) o NVARCHAR(3)
         string testDeptoCod = "TDE";
         var departamento = new Departamento { depto_cod = testDeptoCod, nombre_departament = "Departamento de Prueba Test" };
 
@@ -90,14 +87,9 @@ public class EmpleadoDataTest
             departamento = existingDepartamento;
         }
 
-        // --- Manejo del Rol de Prueba ---
-        // Si id_rol es IDENTITY en DB, NO asignes el ID, deja que la DB lo genere.
-        // Si no es IDENTITY, usa un ID que sepas que no existe (ej. 99, 100).
-        // Para este ejemplo, asumiremos que id_rol es IDENTITY y solo asignamos el nombre.
-        // Si no es IDENTITY, tendrías que asignar 'id_rol = 99' o similar aquí.
+       
         var rol = new Rol { nombre_rol = "Rol de Prueba para Test" };
 
-        // Buscar si un rol con este nombre ya existe, para no duplicarlo en la prueba
         var existingRol = context.Roles.FirstOrDefault(r => r.nombre_rol == rol.nombre_rol);
         if (existingRol == null)
         {
@@ -117,7 +109,7 @@ public class EmpleadoDataTest
             extension = "1234",
             telefono_trabajo = "8888-7777",
             depto_cod = departamento.depto_cod,
-            id_rol = rol.id_rol, // Ahora 'rol.id_rol' tendrá el ID generado o el existente
+            id_rol = rol.id_rol, 
             nombre_usuario = "usuario.test",
             contrasena_hash = "hashseguro123_test",
             email = "usuario.test@example.com"
