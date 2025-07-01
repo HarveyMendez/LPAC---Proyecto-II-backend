@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.Data", "..\OrderF
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.Domain", "..\OrderFlow.Domain\OrderFlow.Domain.csproj", "{41B14169-F378-4889-86A3-93EAA53A8549}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OrderFlow.Test", "..\OrderFlow.Test\OrderFlow.Test.csproj", "{6BEAA4DF-59F7-4296-9C1B-D5BBB9DF6E72}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{41B14169-F378-4889-86A3-93EAA53A8549}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{41B14169-F378-4889-86A3-93EAA53A8549}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{41B14169-F378-4889-86A3-93EAA53A8549}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6BEAA4DF-59F7-4296-9C1B-D5BBB9DF6E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BEAA4DF-59F7-4296-9C1B-D5BBB9DF6E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BEAA4DF-59F7-4296-9C1B-D5BBB9DF6E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BEAA4DF-59F7-4296-9C1B-D5BBB9DF6E72}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
