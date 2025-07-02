@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
 
@@ -6,6 +7,7 @@ namespace OrderFlow.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class EmpleadoController : Controller
     {
         private readonly IEmpleadoBusiness _empleadoBusiness;

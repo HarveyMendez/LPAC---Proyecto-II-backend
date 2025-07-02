@@ -15,7 +15,7 @@ namespace OrderFlow.Domain
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int setupid { get; set; }
 
-        public float impuestoVenta { get; set; }
+        public double impuestoVenta { get; set; }
 
         public string nombre { get; set; } = string.Empty;
 

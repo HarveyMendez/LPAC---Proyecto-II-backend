@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
 
@@ -15,6 +16,7 @@ namespace OrderFlow.API.Controllers
             _productoBusiness = productoBusiness;
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet]
         public ActionResult<List<ProductoDTO>> VerProductos()
         {
@@ -29,6 +31,7 @@ namespace OrderFlow.API.Controllers
 
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet("{id}")]
         public ActionResult<ProductoDTO> VerProductoPorID(int id)
         {
@@ -42,6 +45,7 @@ namespace OrderFlow.API.Controllers
             return Ok(producto);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult Crear([FromBody] ProductoDTO productoDto)
         {
@@ -62,6 +66,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult Modificar(int id, [FromBody] ProductoDTO productoDto)
         {
@@ -89,6 +94,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {

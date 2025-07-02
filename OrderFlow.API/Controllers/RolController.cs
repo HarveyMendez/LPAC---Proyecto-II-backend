@@ -3,12 +3,14 @@ using OrderFlow.Data.Interfaces;
 using OrderFlow.Domain;
 using OrderFlow.Business.Interfaces;
 using OrderFlow.API.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace OrderFlow.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+    [Authorize(Roles = "Admin")]
     public class RolController : Controller
     {
         private readonly IRolBusiness _rolBusiness;

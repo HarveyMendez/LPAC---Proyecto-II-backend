@@ -23,8 +23,16 @@ namespace OrderFlow.Business.Servicios
         {
             var info =  await this.informacionDeMiCompaniaData.ObtenerInfoCompaniaMasRecienteAsync();
 
+            if (info == null)
+            {
+                return null;
+            }
+
             return new InformacionDeMiCompaniaDTO
             {
+                telefono = info.telefono,
+                terminosPago = info.terminos_pago,
+                setupid = info.setupid,
                 codigoPostal = info.codigo_postal,
                 direccion = info.direccion,
                 ciudad = info.ciudad,

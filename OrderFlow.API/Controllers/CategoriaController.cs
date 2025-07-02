@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
 
@@ -15,6 +16,7 @@ namespace OrderFlow.API.Controllers
             _categoriaBusiness = categoriaBusiness;
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet]
         public ActionResult<List<CategoriaDTO>> VerCategorias()
         {
@@ -28,6 +30,7 @@ namespace OrderFlow.API.Controllers
             return Ok(categorias);
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet("{id}")]
         public ActionResult<CategoriaDTO> VerCategoriaPorID(string id)
         {
@@ -41,6 +44,7 @@ namespace OrderFlow.API.Controllers
             return Ok(categoria);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CrearCategoria([FromBody] CategoriaDTO categoriaDto)
         {
@@ -61,6 +65,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult ModificarCategoria(string id, [FromBody] CategoriaDTO categoriaDto)
         {
@@ -88,6 +93,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult Delete(string id)
         {

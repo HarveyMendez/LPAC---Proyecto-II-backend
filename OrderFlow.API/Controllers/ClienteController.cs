@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrderFlow.API.DTO;
 using OrderFlow.Business.Interfaces;
 
@@ -16,6 +17,7 @@ namespace OrderFlow.API.Controllers
             _clienteBusiness = clienteBusiness;
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet]
         public ActionResult<List<ClienteDTO>> VerClientes()
         {
@@ -30,6 +32,7 @@ namespace OrderFlow.API.Controllers
             
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet("{id}")]
         public ActionResult<ClienteDTO> VerClientePorID(int id)
         {
@@ -43,6 +46,7 @@ namespace OrderFlow.API.Controllers
             return Ok(cliente);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CrearCliente([FromBody] ClienteDTO clienteDto)
         {
@@ -63,6 +67,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult ModificarCliente(int id, [FromBody] ClienteDTO clienteDto)
         {
@@ -90,6 +95,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult EliminarCliente(int id)
         {

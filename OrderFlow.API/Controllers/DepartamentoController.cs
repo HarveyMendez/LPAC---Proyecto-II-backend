@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Business.Interfaces;
 using OrderFlow.API.DTO;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace OrderFlow.API.Controllers
@@ -16,6 +17,7 @@ namespace OrderFlow.API.Controllers
             _departamentoBusiness = departamentoBusiness;
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet]
         public ActionResult<List<DepartamentoDTO>> VerDepartamentos()
         {
@@ -29,6 +31,7 @@ namespace OrderFlow.API.Controllers
             return Ok(departamentos);
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet("{id}")]
         public ActionResult<DepartamentoDTO> VerDepartamentoPorID(string id)
         {
@@ -43,6 +46,7 @@ namespace OrderFlow.API.Controllers
 
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CrearDepartamento([FromBody] DepartamentoDTO departamentoDto)
         {
@@ -63,6 +67,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public IActionResult ModificarDepartamento(string id, [FromBody] DepartamentoDTO departamentoDto)
         {
@@ -90,6 +95,7 @@ namespace OrderFlow.API.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public IActionResult EliminarDepartamento(string id)
         {

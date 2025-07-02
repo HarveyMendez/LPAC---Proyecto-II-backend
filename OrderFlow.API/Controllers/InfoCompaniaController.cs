@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using OrderFlow.Business.DTO;
 using OrderFlow.Business.Interfaces;
 
@@ -15,10 +16,11 @@ namespace OrderFlow.API.Controllers
             _informacionDeMiCompaniaService = informacionDeMiCompaniaService;
         }
 
+        [Authorize(Roles = "Admin,Usuario")]
         [HttpGet]
-        public ActionResult<InformacionDeMiCompaniaDTO> Get()
+        public async Task<ActionResult<InformacionDeMiCompaniaDTO>> Get()
         {
-            var informacion = _informacionDeMiCompaniaService.ObtenerInfoCompaniaMasRecienteAsync();
+            var informacion = await _informacionDeMiCompaniaService.ObtenerInfoCompaniaMasRecienteAsync();
 
             if (informacion == null)
             {
