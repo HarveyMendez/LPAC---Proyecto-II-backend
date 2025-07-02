@@ -78,7 +78,7 @@ namespace OrderFlow.API.Controllers
 
             try
             {
-                _categoriaBusiness.Modificar(categoriaExistente);
+                _categoriaBusiness.Modificar(categoriaDto);
 
                 return Ok(categoriaDto);
 

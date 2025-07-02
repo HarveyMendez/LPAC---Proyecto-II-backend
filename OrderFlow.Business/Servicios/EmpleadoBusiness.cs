@@ -24,6 +24,8 @@ namespace OrderFlow.Business.Servicios
         {
             var empleado = EmpleadoMapper.ToModel(empleadoDTO);
 
+            empleado.contrasena_hash = BCrypt.Net.BCrypt.HashPassword(empleado.contrasena_hash);
+
             _empleadoData.Crear(empleado);
         }
 
@@ -44,7 +46,7 @@ namespace OrderFlow.Business.Servicios
             empleadoExistente.depto_cod = empleado.departamento.codDepartamento;
             empleadoExistente.id_rol = empleado.rol.idRol;
             empleadoExistente.nombre_usuario = empleado.nombre_usuario;
-            empleadoExistente.contrasena_hash = empleado.contrasena_hash;
+            empleadoExistente.contrasena_hash = BCrypt.Net.BCrypt.HashPassword(empleado.contrasena_hash);
             empleadoExistente.email = empleado.email;
 
 
