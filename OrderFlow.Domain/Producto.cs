@@ -25,9 +25,6 @@ namespace OrderFlow.Domain
         [Required]
         public bool aplica_impuesto { get; set; }
         public string talla { get; set; } = string.Empty;
-        [Required]
-        public bool eliminado { get; set; } = false;
-
 
         // Virtual Links
 

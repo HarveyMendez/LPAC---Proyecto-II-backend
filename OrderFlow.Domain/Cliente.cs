@@ -34,7 +34,5 @@ namespace OrderFlow.Domain
         public string telefono { get; set; } = string.Empty;
         [Required]
         public string num_fax { get; set; } = string.Empty;
-        [Required]
-        public bool eliminado { get; set; } = false;
     }
 }

@@ -16,6 +16,5 @@ namespace OrderFlow.API.DTO
         public string pais { get; set; } = string.Empty;
         public string telefono { get; set; } = string.Empty;
         public string numFax { get; set; } = string.Empty;
-        public bool eliminado { get; set; } = false;
     }
 }

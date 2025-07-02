@@ -121,7 +121,6 @@ namespace OrderFlow.Test.Data
                 talla = "Única",
                 punto_reorden = 5,
                 aplica_impuesto = true,
-                eliminado = false,
                 cod_categoria = categoria.cod_categoria
             };
             if (!context.Productos.Any(p => p.nombre_producto == "Producto Test Orden"))
@@ -145,9 +144,7 @@ namespace OrderFlow.Test.Data
                 codigo_postal = "10101",
                 pais = "Costa Rica",
                 telefono = "2222-3333",
-                num_fax = "2222-4444",
-                eliminado = false
-            };
+                num_fax = "2222-4444"            };
             if (!context.Clientes.Any(c => c.nombre_compania == "Compañía Test Orden"))
             {
                 context.Clientes.Add(cliente);

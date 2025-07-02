@@ -82,8 +82,7 @@ namespace OrderFlow.Test.Data
                 codigo_postal = TestCodigoPostal,
                 pais = TestPais,
                 telefono = TestTelefono,
-                num_fax = TestNumFax,
-                eliminado = false
+                num_fax = TestNumFax            
             };
             Assert.DoesNotThrow(() => clienteData.Crear(clienteToInsert), "Crear un cliente no debería generar una excepción.");
             Assert.That(clienteToInsert.cliente_id, Is.GreaterThan(0), "El ID del cliente debe ser mayor que 0 después de la inserción.");

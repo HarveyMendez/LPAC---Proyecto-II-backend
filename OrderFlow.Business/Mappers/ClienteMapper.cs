@@ -23,7 +23,6 @@ namespace OrderFlow.Business.Mappers
                 ciudad = cliente.ciudad,
                 codigoPostal = cliente.codigo_postal,
                 direccion = cliente.direccion,
-                eliminado = cliente.eliminado,
                 nombreContacto = cliente.nombre_contacto,
                 telefono = cliente.telefono,
                 numFax = cliente.num_fax,

@@ -23,7 +23,6 @@ namespace OrderFlow.Business.Mappers
                 aplicaImpuesto = producto.aplica_impuesto,
                 cantidadExistencias = producto.cantidad_existencias,
                 categoria = CategoriaMapper.ToDTO(producto.Categoria),
-                eliminado = producto.eliminado,
                 precio = producto.precio,
                 puntoReorden = producto.punto_reorden,
                 talla = producto.talla

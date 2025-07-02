@@ -10,7 +10,5 @@
         public int puntoReorden { get; set; }
         public bool aplicaImpuesto { get; set; } = false;
         public string talla { get; set; } = string.Empty;
-        public bool eliminado { get; set; } = false;
-
     }
 }

@@ -85,7 +85,6 @@ public class ProductoDataTest
             talla = "M",
             punto_reorden = 5,
             aplica_impuesto = true,
-            eliminado = false,
             cod_categoria = categoria.cod_categoria
         };
         Assert.DoesNotThrow(() => productoData.Crear(productoToInsert), "Crear un producto no debería generar una excepción.");

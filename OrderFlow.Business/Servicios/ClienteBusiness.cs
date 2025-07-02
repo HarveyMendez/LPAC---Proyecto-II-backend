@@ -28,7 +28,6 @@ namespace OrderFlow.Business.Servicios
                 ciudad = clienteDTO.ciudad,
                 direccion = clienteDTO.direccion,
                 codigo_postal = clienteDTO.codigoPostal,
-                eliminado = false,
                 nombre_compania = clienteDTO.nombreCompania,
                 nombre_contacto = clienteDTO.nombreContacto,
                 telefono = clienteDTO.telefono,
@@ -48,7 +47,6 @@ namespace OrderFlow.Business.Servicios
             cliente.ciudad = clienteDTO.ciudad;
             cliente.direccion = clienteDTO.direccion;
             cliente.codigo_postal = clienteDTO.codigoPostal;
-            cliente.eliminado = clienteDTO.eliminado;
             cliente.nombre_compania = clienteDTO.nombreCompania;
             cliente.nombre_contacto = clienteDTO.nombreContacto;
             cliente.telefono = clienteDTO.telefono;

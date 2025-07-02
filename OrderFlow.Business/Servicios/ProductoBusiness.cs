@@ -30,7 +30,6 @@ namespace OrderFlow.Business.Servicios
                 talla = productoDTO.talla,
                 punto_reorden = productoDTO.puntoReorden,
                 aplica_impuesto = productoDTO.aplicaImpuesto,
-                eliminado = productoDTO.eliminado,
                 cod_categoria = productoDTO.categoria.codCategoria,
             };
 
@@ -47,7 +46,6 @@ namespace OrderFlow.Business.Servicios
             productoExistente.talla = producto.talla;
             productoExistente.punto_reorden = producto.puntoReorden;
             productoExistente.aplica_impuesto = producto.aplicaImpuesto;
-            productoExistente.eliminado = producto.eliminado;
             productoExistente.Categoria.cod_categoria = producto.categoria.codCategoria;
             productoExistente.Categoria.descripcion = producto.categoria.descripcion;
 
