@@ -32,10 +32,41 @@ namespace OrderFlow.Data.Contexto
             modelBuilder.Entity<DetalleOrden>()
                 .HasKey(d => new { d.id_orden, d.id_producto });
 
+
             modelBuilder.Entity<DetalleOrden>()
-                .HasOne(d => d.Orden)
-                .WithMany(o => o.Detalles)
-                .HasForeignKey(d => d.id_orden);
+                .HasOne(d => d.Producto)
+                .WithMany()
+                .HasForeignKey(d => d.id_producto)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Orden>()
+                .HasMany(o => o.Detalles)
+                .WithOne(d => d.Orden)
+                .HasForeignKey(d => d.id_orden)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Cliente>()
+                .HasMany(c => c.ordenes)
+                .WithOne(o => o.Cliente)
+                .HasForeignKey(o => o.cliente_id)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<Empleado>()
+                .HasOne(e => e.Departamento)
+                .WithMany()
+                .HasForeignKey(e => e.depto_cod)
+                .OnDelete(DeleteBehavior.SetNull);
+
+            modelBuilder.Entity<Producto>()
+                .HasOne(p => p.Categoria)
+                .WithMany()
+                .HasForeignKey(p => p.cod_categoria)
+                .OnDelete(DeleteBehavior.SetNull);
+
+
+
+
+
 
         }
 
