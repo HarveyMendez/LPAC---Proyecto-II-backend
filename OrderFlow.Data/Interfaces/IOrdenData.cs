@@ -9,7 +9,7 @@ namespace OrderFlow.Data.Interfaces
 {
     public interface IOrdenData
     {
-        public void Crear(Orden orden);
+        public Orden Crear(Orden orden);
         
         public Orden ObtenerPorId(int id);
 

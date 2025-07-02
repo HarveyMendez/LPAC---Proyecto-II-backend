@@ -19,11 +19,13 @@ namespace OrderFlow.Data.Repositorios
             _contexto = contexto;
         }
 
-        public void Crear(Orden orden)
+        public Orden Crear(Orden orden)
         {
             _contexto.Ordenes.Add(orden);
 
             _contexto.SaveChanges();
+
+            return orden;
         }
 
         public List<Orden> ObtenerOrdenes()
@@ -41,7 +43,13 @@ namespace OrderFlow.Data.Repositorios
 
         public Orden ObtenerPorId(int id)
         {
-            var orden = _contexto.Ordenes.FirstOrDefault(o => o.id_orden == id);
+            var orden = _contexto.Ordenes
+                .Include(o => o.Cliente)
+                .Include(o => o.Empleado)
+                .Include(o => o.Detalles)
+                    .ThenInclude(d => d.Producto)
+                        .ThenInclude(p => p.Categoria)
+            .FirstOrDefault(o => o.id_orden == id);
 
             return orden;
         }

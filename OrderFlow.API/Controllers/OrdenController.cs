@@ -18,7 +18,7 @@ namespace OrderFlow.API.Controllers
         }
 
         [HttpPost]
-        public IActionResult CrearOrden([FromBody] OrdenDTO ordenDTO)
+        public ActionResult<OrdenDTO> CrearOrden([FromBody] OrdenDTO ordenDTO)
         {
             if (ordenDTO == null)
             {
@@ -26,9 +26,9 @@ namespace OrderFlow.API.Controllers
             }
             try
             {
-                _ordenBusiness.Crear(ordenDTO);
+                var ordenCreada = _ordenBusiness.Crear(ordenDTO);
 
-                return Ok(ordenDTO);
+                return Ok(ordenCreada);
             }
             catch (Exception ex)
             {
@@ -74,6 +74,27 @@ namespace OrderFlow.API.Controllers
             catch (Exception ex)
             {
                 return StatusCode(500, $"Error al obtener la orden: {ex.Message}");
+            }
+        }
+
+        [HttpPost("generar-factura")]
+        public async Task<IActionResult> GenerarFacturaPdf([FromBody] OrdenDTO ordenDTO)
+        {
+            if (ordenDTO == null)
+            {
+                return BadRequest("Orden no puede ser nula.");
+            }
+
+            try
+            {
+                byte[] pdfBytes = await _ordenBusiness.GenerarFacturaPdfAsync(ordenDTO);
+
+                return File(pdfBytes, "application/pdf", $"Factura_{ordenDTO.idOrden}.pdf");
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error al generar el PDF: {ex.Message}");
+                return StatusCode(404, $"Error al generar el PDF: {ex.Message}");
             }
         }
     }
