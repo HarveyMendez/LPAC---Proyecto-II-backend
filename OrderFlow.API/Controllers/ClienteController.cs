@@ -84,7 +84,7 @@ namespace OrderFlow.API.Controllers
 
             try
             {
-                _clienteBusiness.Modificar(clienteExistente);
+                _clienteBusiness.Modificar(clienteDto);
 
                 return Ok(clienteDto);
 
